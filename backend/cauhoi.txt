@@ -1,0 +1,282 @@
+[
+  {
+    "id": 1, "level": 1,
+    "question": "Tên thật của Trần Hưng Đạo là gì?",
+    "options": { "A": "Trần Quốc Tuấn", "B": "Trần Thái Tông", "C": "Trần Nhân Tông", "D": "Trần Quốc Toản" },
+    "answer": "A",
+    "hint": "Tên thật của ông bắt đầu bằng 'Trần Quốc' và chữ cuối là tên một đức tính."
+  },
+  {
+    "id": 2, "level": 1,
+    "question": "Nhân dân thường gọi Trần Hưng Đạo là gì?",
+    "options": { "A": "Đức Thánh Gióng", "B": "Đức Thánh Trần", "C": "Đức Thánh Tản", "D": "Đức Thánh Mẫu" },
+    "answer": "B",
+    "hint": "Danh hiệu gắn với họ Trần — dòng họ của ông."
+  },
+  {
+    "id": 3, "level": 1,
+    "question": "Trần Hưng Đạo đã lãnh đạo bao nhiêu lần kháng chiến thắng lợi trước quân Mông-Nguyên?",
+    "options": { "A": "1 lần", "B": "2 lần", "C": "3 lần", "D": "4 lần" },
+    "answer": "C",
+    "hint": "Con số này trải dài từ năm 1258 đến năm 1288."
+  },
+  {
+    "id": 4, "level": 1,
+    "question": "Trần Hưng Đạo mất vào năm nào?",
+    "options": { "A": "1285", "B": "1295", "C": "1300", "D": "1310" },
+    "answer": "C",
+    "hint": "Ông mất vào ngày 20 tháng 8 năm đó tại Vạn Kiếp."
+  },
+  {
+    "id": 5, "level": 1,
+    "question": "Ông sinh vào khoảng năm nào?",
+    "options": { "A": "1210", "B": "1228", "C": "1245", "D": "1260" },
+    "answer": "B",
+    "hint": "Năm sinh của ông cách năm mất khoảng 70-72 năm."
+  },
+  {
+    "id": 6, "level": 1,
+    "question": "Cha của Trần Hưng Đạo là ai?",
+    "options": { "A": "Trần Thái Tông", "B": "Trần Liễu", "C": "Trần Nhân Tông", "D": "Trần Anh Tông" },
+    "answer": "B",
+    "hint": "Cha ông là anh trai của vua Trần Thái Tông, được phong tước An Sinh Vương."
+  },
+  {
+    "id": 7, "level": 1,
+    "question": "Vợ của Trần Hưng Đạo là ai?",
+    "options": { "A": "Công chúa Thiên Thành", "B": "Công chúa An Tư", "C": "Công chúa Huyền Trân", "D": "Công chúa Bảo Châu" },
+    "answer": "A",
+    "hint": "Bà là con gái của vua Trần Thái Tông."
+  },
+  {
+    "id": 8, "level": 1,
+    "question": "Trần Hưng Đạo mất tại đâu?",
+    "options": { "A": "Thăng Long", "B": "Vạn Kiếp", "C": "Sông Bạch Đằng", "D": "Nam Định" },
+    "answer": "B",
+    "hint": "Ông về ở ẩn và mất tại nơi này — nay thuộc tỉnh Hải Dương."
+  },
+  {
+    "id": 9, "level": 1,
+    "question": "Nơi thờ chính của Trần Hưng Đạo hiện nay là?",
+    "options": { "A": "Đền Kiếp Bạc", "B": "Đền Bảo Lộc", "C": "Đền Ngọc Sơn", "D": "Đền Hùng" },
+    "answer": "A",
+    "hint": "Đền này nằm tại Hải Dương, hàng năm thu hút hàng triệu du khách."
+  },
+  {
+    "id": 10, "level": 1,
+    "question": "Tước hiệu của Trần Hưng Đạo là gì?",
+    "options": { "A": "Hưng Đạo Đại Vương", "B": "An Sinh Vương", "C": "Chiêu Văn Vương", "D": "Chiêu Đạo Vương" },
+    "answer": "A",
+    "hint": "Tước hiệu này gắn với địa danh Hưng Đạo và danh hiệu Đại Vương."
+  },
+  {
+    "id": 11, "level": 1,
+    "question": "Hịch Tướng Sĩ là gì?",
+    "options": { "A": "Bài hịch khích lệ tinh thần chiến đấu của tướng sĩ", "B": "Cuốn sách binh pháp nổi tiếng", "C": "Bài thơ về lòng yêu nước", "D": "Chiếu của vua ban cho Trần Hưng Đạo" },
+    "answer": "A",
+    "hint": "Đây là áng văn bất hủ trong lịch sử văn học Việt Nam, viết năm 1285."
+  },
+  {
+    "id": 12, "level": 1,
+    "question": "Chiến thuật nổi tiếng 'vườn không nhà trống' có nghĩa là gì?",
+    "options": { "A": "Rút lui, không để lại lương thực cho địch", "B": "Đốt phá thành trì", "C": "Tấn công bất ngờ vào ban đêm", "D": "Đào hào chắn quân địch" },
+    "answer": "A",
+    "hint": "Chiến thuật nhằm làm quân địch kiệt sức vì thiếu lương thực và tài sản."
+  },
+  {
+    "id": 13, "level": 1,
+    "question": "Trần Hưng Đạo đánh thắng quân xâm lược nào?",
+    "options": { "A": "Quân Tống", "B": "Quân Minh", "C": "Quân Mông-Nguyên", "D": "Quân Chăm Pa" },
+    "answer": "C",
+    "hint": "Đây là đội quân hùng mạnh nhất thế giới thế kỷ XIII, đã chinh phục cả châu Á và châu Âu."
+  },
+  {
+    "id": 14, "level": 1,
+    "question": "Đền Bảo Lộc — nơi sinh của Trần Hưng Đạo — thuộc tỉnh nào?",
+    "options": { "A": "Hải Dương", "B": "Nam Định", "C": "Hà Nam", "D": "Thái Bình" },
+    "answer": "B",
+    "hint": "Tỉnh này nằm ở đồng bằng sông Hồng, phía nam Hà Nội."
+  },
+  {
+    "id": 15, "level": 2,
+    "question": "Cuộc kháng chiến chống Mông-Nguyên lần thứ nhất diễn ra vào năm nào?",
+    "options": { "A": "1250", "B": "1258", "C": "1265", "D": "1270" },
+    "answer": "B",
+    "hint": "Đây là lần đầu tiên quân Mông Cổ xâm lược Đại Việt, vào thế kỷ XIII."
+  },
+  {
+    "id": 16, "level": 2,
+    "question": "Thoát Hoan — kẻ chỉ huy quân Nguyên lần 2 — là con trai của ai?",
+    "options": { "A": "Hốt Tất Liệt", "B": "Thành Cát Tư Hãn", "C": "Ô Mã Nhi", "D": "Toa Đô" },
+    "answer": "A",
+    "hint": "Vị hoàng đế Mông Cổ này cũng chính là người đã chinh phục nhà Tống."
+  },
+  {
+    "id": 17, "level": 2,
+    "question": "Chiến thắng Bạch Đằng lịch sử diễn ra vào năm nào?",
+    "options": { "A": "1258", "B": "1285", "C": "1288", "D": "1300" },
+    "answer": "C",
+    "hint": "Đây là trận thủy chiến vĩ đại trong cuộc kháng chiến lần thứ ba."
+  },
+  {
+    "id": 18, "level": 2,
+    "question": "Cuộc kháng chiến lần thứ hai (1285) có khoảng bao nhiêu quân Nguyên?",
+    "options": { "A": "3 vạn", "B": "10 vạn", "C": "30 vạn", "D": "50 vạn" },
+    "answer": "D",
+    "hint": "Đây là lực lượng lớn nhất trong 3 lần xâm lược, do chính Thoát Hoan chỉ huy."
+  },
+  {
+    "id": 19, "level": 2,
+    "question": "Toa Đô bị tiêu diệt tại trận nào?",
+    "options": { "A": "Bạch Đằng", "B": "Hàm Tử", "C": "Tây Kết", "D": "Chương Dương" },
+    "answer": "C",
+    "hint": "Trận này là một trong những chiến thắng lớn của cuộc kháng chiến lần thứ hai."
+  },
+  {
+    "id": 20, "level": 2,
+    "question": "Ô Mã Nhi bị bắt sống tại trận nào?",
+    "options": { "A": "Hàm Tử", "B": "Chương Dương", "C": "Bạch Đằng", "D": "Tây Kết" },
+    "answer": "C",
+    "hint": "Đây là thất bại thảm hại nhất của quân Nguyên, tại con sông nổi tiếng."
+  },
+  {
+    "id": 21, "level": 2,
+    "question": "Hịch Tướng Sĩ được viết vào năm nào?",
+    "options": { "A": "1258", "B": "1285", "C": "1288", "D": "1290" },
+    "answer": "B",
+    "hint": "Bài hịch được viết ngay trước cuộc kháng chiến lần thứ hai để khích lệ tướng sĩ."
+  },
+  {
+    "id": 22, "level": 2,
+    "question": "Trần Hưng Đạo được phong chức gì trong cuộc kháng chiến lần thứ hai?",
+    "options": { "A": "Tiết độ sứ", "B": "Quốc công Tiết chế", "C": "Thái úy", "D": "Tể tướng" },
+    "answer": "B",
+    "hint": "Chức vụ này trao quyền tổng chỉ huy toàn bộ quân đội Đại Việt cho ông."
+  },
+  {
+    "id": 23, "level": 2,
+    "question": "Con rể nổi tiếng của Trần Hưng Đạo là ai?",
+    "options": { "A": "Trần Quang Khải", "B": "Phạm Ngũ Lão", "C": "Trần Khánh Dư", "D": "Đinh Lễ" },
+    "answer": "B",
+    "hint": "Người này nổi tiếng là đang ngồi đan giỏ, mải nghĩ chuyện nước đến mức bị giáo đâm vào đùi mà không biết."
+  },
+  {
+    "id": 24, "level": 2,
+    "question": "Cuốn sách binh pháp nào do Trần Hưng Đạo biên soạn?",
+    "options": { "A": "Binh thư yếu lược", "B": "Binh pháp Tôn Tử bản Việt", "C": "Lĩnh Nam chích quái", "D": "Đại Việt sử ký" },
+    "answer": "A",
+    "hint": "Tên sách có nghĩa là 'những điều cốt lõi trong binh pháp'."
+  },
+  {
+    "id": 25, "level": 2,
+    "question": "Trận Đông Bộ Đầu (1258) kết thúc với kết quả gì?",
+    "options": { "A": "Quân Trần thua trận", "B": "Hai bên hòa giải", "C": "Đại thắng, giải phóng Thăng Long", "D": "Quân Trần rút lui" },
+    "answer": "C",
+    "hint": "Đây là trận đánh quyết định trong cuộc kháng chiến lần thứ nhất."
+  },
+  {
+    "id": 26, "level": 2,
+    "question": "Chiến thuật 'chiến tranh nhân dân' của Trần Hưng Đạo có nghĩa là?",
+    "options": { "A": "Vua trực tiếp ra trận chỉ huy", "B": "Huy động và tổ chức toàn dân cùng tham gia kháng chiến", "C": "Thuê lính các nước lân bang", "D": "Chỉ dùng quân tinh nhuệ ít người" },
+    "answer": "B",
+    "hint": "Ông hiểu sức mạnh thực sự của cuộc kháng chiến nằm ở chính nhân dân."
+  },
+  {
+    "id": 27, "level": 2,
+    "question": "Tướng Mông Cổ chỉ huy cuộc xâm lược lần thứ nhất (1258) là ai?",
+    "options": { "A": "Thoát Hoan", "B": "Uriyangkhadai", "C": "Ô Mã Nhi", "D": "Toa Đô" },
+    "answer": "B",
+    "hint": "Đây là vị tướng Mông Cổ chỉ huy khoảng 3 vạn quân trong cuộc xâm lược đầu tiên."
+  },
+  {
+    "id": 28, "level": 3,
+    "question": "Cha của Trần Hưng Đạo (Trần Liễu) có mâu thuẫn với ai và vì chuyện gì?",
+    "options": { "A": "Vua Trần Thái Tông — tranh giành vợ (bà Thuận Thiên)", "B": "Vua Trần Nhân Tông — tranh giành ngôi báu", "C": "Trần Quang Khải — tranh chấp đất đai", "D": "Phạm Ngũ Lão — tranh giành quyền lực quân sự" },
+    "answer": "A",
+    "hint": "Bà Thuận Thiên vốn là vợ của Trần Liễu trước khi bị vua lấy."
+  },
+  {
+    "id": 29, "level": 3,
+    "question": "Con trai nào của Trần Hưng Đạo bị mắng vì bàn chuyện nhân cơ hội giặc đến mà cướp ngôi?",
+    "options": { "A": "Trần Quốc Nghiễn", "B": "Trần Quốc Hiến", "C": "Trần Quốc Tảng", "D": "Trần Quốc Căng" },
+    "answer": "C",
+    "hint": "Trần Hưng Đạo nổi giận bảo: 'Thằng này trông thấy mặt ta, ta chém đầu mày trước.'"
+  },
+  {
+    "id": 30, "level": 3,
+    "question": "Thoát Hoan trốn thoát về nước sau lần kháng chiến thứ hai bằng cách nào?",
+    "options": { "A": "Cải trang thành người dân thường", "B": "Chui vào ống đồng để quân sĩ khiêng chạy", "C": "Đi thuyền nhỏ vượt biển", "D": "Cưỡi ngựa trắng phi thẳng về biên giới" },
+    "answer": "B",
+    "hint": "Chi tiết lịch sử rất kỳ lạ và nổi tiếng này cho thấy sự thất bại nhục nhã của giặc."
+  },
+  {
+    "id": 31, "level": 3,
+    "question": "Trần Khánh Dư tiêu diệt đoàn thuyền lương của địch trong lần 3 tại đâu?",
+    "options": { "A": "Bạch Đằng", "B": "Vân Đồn", "C": "Hàm Tử", "D": "Lạch Trường" },
+    "answer": "B",
+    "hint": "Địa danh này là một cửa biển quan trọng ở vùng Đông Bắc, thuộc Quảng Ninh ngày nay."
+  },
+  {
+    "id": 32, "level": 3,
+    "question": "Cọc cắm ngầm dưới sông Bạch Đằng để tiêu diệt thuyền giặc được làm từ vật liệu gì?",
+    "options": { "A": "Cọc tre vát nhọn", "B": "Cọc sắt bịt đầu", "C": "Cọc gỗ lim", "D": "Cọc đá ngầm" },
+    "answer": "C",
+    "hint": "Gỗ lim là loại gỗ cứng nhất và bền nhất miền nhiệt đới, không bị mục nước."
+  },
+  {
+    "id": 33, "level": 3,
+    "question": "Phạm Ngũ Lão — con rể của Trần Hưng Đạo — là tác giả bài thơ nào?",
+    "options": { "A": "Nam Quốc Sơn Hà", "B": "Thuật Hoài", "C": "Hịch Tướng Sĩ", "D": "Bình Ngô Đại Cáo" },
+    "answer": "B",
+    "hint": "Bài thơ này có câu 'Tu thính nhân gian thuyết Vũ Hầu', thể hiện chí khí anh hùng."
+  },
+  {
+    "id": 34, "level": 3,
+    "question": "Câu 'Nếu bệ hạ muốn hàng, trước hết hãy chém đầu thần đi đã' của Trần Hưng Đạo thể hiện điều gì?",
+    "options": { "A": "Sự kiêu ngạo, coi thường vua", "B": "Lòng trung thành tuyệt đối và ý chí không đầu hàng", "C": "Tính phục tùng mệnh lệnh", "D": "Sự tức giận nhất thời" },
+    "answer": "B",
+    "hint": "Câu nói này cho thấy ông sẵn sàng chết chứ không chịu đầu hàng."
+  },
+  {
+    "id": 35, "level": 3,
+    "question": "Trước khi mất, Trần Hưng Đạo dặn dò về hậu sự của mình như thế nào?",
+    "options": { "A": "Xây lăng tẩm thật lớn tại Vạn Kiếp", "B": "Chôn cất đơn sơ tại quê hương Nam Định", "C": "Hỏa táng, tro bỏ bình chôn trong vườn An Lạc, không xây lăng to", "D": "Thả tro xuống sông Bạch Đằng" },
+    "answer": "C",
+    "hint": "Ông không muốn làm khổ dân vì việc tang lễ của mình."
+  },
+  {
+    "id": 36, "level": 3,
+    "question": "Cuộc kháng chiến lần thứ nhất (1258), quân Mông Cổ có khoảng bao nhiêu người?",
+    "options": { "A": "3 vạn", "B": "10 vạn", "C": "20 vạn", "D": "30 vạn" },
+    "answer": "A",
+    "hint": "Đây là lực lượng nhỏ nhất trong 3 lần, nhưng vẫn đủ sức uy hiếp Đại Việt."
+  },
+  {
+    "id": 37, "level": 3,
+    "question": "Trần Khánh Dư tiêu diệt đoàn thuyền lương địch tại Vân Đồn vào tháng mấy năm 1287?",
+    "options": { "A": "Tháng 10", "B": "Tháng 11", "C": "Tháng 12", "D": "Tháng 1/1288" },
+    "answer": "C",
+    "hint": "Sự kiện này xảy ra cuối năm 1287, cắt đứt nguồn lương thực của quân Nguyên."
+  },
+  {
+    "id": 38, "level": 3,
+    "question": "Sách 'Vạn Kiếp tông bí truyền thư' của Trần Hưng Đạo là loại sách gì?",
+    "options": { "A": "Sách lịch sử ghi chép các trận đánh", "B": "Sách thơ văn yêu nước", "C": "Sách binh pháp và chiến lược quân sự bí truyền", "D": "Sách dạy võ thuật cận chiến" },
+    "answer": "C",
+    "hint": "Từ 'tông bí truyền' trong tên sách đã gợi ý đây là tài liệu bí mật được truyền trong nội bộ."
+  },
+  {
+    "id": 39, "level": 3,
+    "question": "Câu nói 'Khoan thư sức dân để làm kế sâu rễ bền gốc, đó là thượng sách giữ nước' được Trần Hưng Đạo nói trong hoàn cảnh nào?",
+    "options": { "A": "Trước trận Bạch Đằng năm 1288", "B": "Khi soạn Hịch Tướng Sĩ năm 1285", "C": "Khi vua Trần Anh Tông hỏi kế sách trước lúc ông mất", "D": "Khi nhậm chức Quốc công Tiết chế" },
+    "answer": "C",
+    "hint": "Đây là di ngôn cuối cùng của ông, được nói khi vua đến thăm ông ở Vạn Kiếp trước khi ông qua đời."
+  },
+  {
+    "id": 40, "level": 3,
+    "question": "Trần Hưng Đạo được liệt vào hàng nào trong tín ngưỡng dân gian Việt Nam?",
+    "options": { "A": "Ngũ Hổ Tướng", "B": "Tứ bất tử (bốn vị thánh bất tử)", "C": "Thất tinh thần tướng", "D": "Lục vị thần hoàng" },
+    "answer": "B",
+    "hint": "Đây là nhóm 4 nhân vật huyền thoại bất tử trong tín ngưỡng dân gian Việt Nam."
+  }
+]

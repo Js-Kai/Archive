@@ -1,0 +1,2684 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HistoryHero - Học Lịch Sử Tương Tác</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <style>
+    :root {
+      --green: #58CC02;
+      --green-dark: #45A800;
+      --green-light: #89E219;
+      --green-bg: #D7FFB8;
+      --blue: #1CB0F6;
+      --blue-dark: #0095D9;
+      --yellow: #FFD900;
+      --yellow-dark: #CE9B00;
+      --red: #FF4B4B;
+      --orange: #FF9600;
+      --purple: #CE82FF;
+      --gray: #AFAFAF;
+      --gray-light: #F7F7F7;
+      --text: #3C3C3C;
+      --white: #FFFFFF;
+      --shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #F7F7F7;
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* =================== NAVBAR =================== */
+    .navbar {
+      background: white;
+      border-bottom: 2px solid #E5E5E5;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--green);
+      text-decoration: none;
+    }
+
+    .nav-logo span {
+      font-size: 28px;
+    }
+
+    .nav-btn {
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 10px 20px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--green-dark);
+      transition: all 0.1s;
+    }
+
+    .nav-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--green-dark);
+    }
+
+    /* =================== SCREENS =================== */
+    .screen {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* =================== LANDING PAGE =================== */
+    #screen-landing {
+      background: linear-gradient(180deg, #FFFFFF 0%, #F0FFF4 100%);
+    }
+
+    .hero-section {
+      text-align: center;
+      padding: 60px 20px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-circles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-bg-circles::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(88, 204, 2, 0.08) 0%, transparent 70%);
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .mascot-container {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+
+    .mascot {
+      font-size: 120px;
+      display: block;
+      animation: mascot-float 3s ease-in-out infinite;
+      filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.15));
+    }
+
+    @keyframes mascot-float {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(-2deg);
+      }
+
+      50% {
+        transform: translateY(-15px) rotate(2deg);
+      }
+    }
+
+    .mascot-badge {
+      position: absolute;
+      top: 10px;
+      right: -10px;
+      background: var(--yellow);
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 3px 0 var(--yellow-dark);
+      animation: badge-bounce 2s ease-in-out infinite 0.5s;
+    }
+
+    @keyframes badge-bounce {
+
+      0%,
+      100% {
+        transform: scale(1) rotate(0deg);
+      }
+
+      50% {
+        transform: scale(1.15) rotate(10deg);
+      }
+    }
+
+    .hero-title {
+      font-size: clamp(28px, 6vw, 48px);
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero-title .highlight {
+      color: var(--green);
+      position: relative;
+    }
+
+    .hero-subtitle {
+      font-size: 18px;
+      color: #777;
+      font-weight: 600;
+      margin-bottom: 36px;
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 48px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 6px 0 var(--green-dark);
+      transition: all 0.1s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .btn-primary:hover {
+      background: var(--green-light);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 var(--green-dark);
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      background: white;
+      color: var(--blue);
+      border: 3px solid var(--blue);
+      border-radius: 16px;
+      padding: 15px 48px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .btn-secondary:hover {
+      background: #EBF8FF;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary:active {
+      transform: translateY(1px);
+    }
+
+    /* =================== REVIEW SECTION =================== */
+    .section-title {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--text);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .review-section {
+      padding: 20px 24px 40px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .tab-container {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .tab-header {
+      display: flex;
+      border-bottom: 2px solid #E5E5E5;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 14px;
+      background: none;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--gray);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tab-btn.active {
+      color: var(--green);
+      border-bottom: 3px solid var(--green);
+      margin-bottom: -2px;
+    }
+
+    .tab-content {
+      display: none;
+      padding: 28px 24px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .illustration-container {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .illustration-img {
+      width: 100%;
+      max-width: 280px;
+      height: 200px;
+      background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      font-size: 80px;
+      box-shadow: 0 4px 20px rgba(88, 204, 2, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .illustration-img::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3) 50%, transparent 60%);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%);
+      }
+
+      100% {
+        transform: translateX(100%);
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .btn-action {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: white;
+      border: 3px solid #E5E5E5;
+      border-radius: 16px;
+      padding: 16px 20px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+      width: 100%;
+    }
+
+    .btn-action:hover {
+      border-color: var(--green);
+      background: #F0FFF0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(88, 204, 2, 0.2);
+    }
+
+    .btn-action .icon {
+      font-size: 28px;
+      width: 40px;
+      text-align: center;
+    }
+
+    .btn-action .text-group {
+      flex: 1;
+    }
+
+    .btn-action .text-main {
+      display: block;
+      color: var(--text);
+    }
+
+    .btn-action .text-sub {
+      display: block;
+      font-size: 12px;
+      color: var(--gray);
+      font-weight: 600;
+    }
+
+    /* =================== ABOUT SECTION =================== */
+    .about-section {
+      background: white;
+      padding: 48px 24px;
+      margin-top: 20px;
+    }
+
+    .about-inner {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .feature-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .feature-card {
+      background: var(--gray-light);
+      border-radius: 16px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+
+    .feature-card .icon {
+      font-size: 36px;
+      margin-bottom: 8px;
+    }
+
+    .feature-card h3 {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .feature-card p {
+      font-size: 12px;
+      color: #777;
+      font-weight: 600;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 28px;
+      padding: 24px;
+      background: linear-gradient(135deg, var(--green) 0%, var(--green-light) 100%);
+      border-radius: 20px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: 900;
+      color: white;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.85);
+      text-transform: uppercase;
+    }
+
+    /* =================== MODAL =================== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      align-items: flex-end;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal-box {
+      background: white;
+      border-radius: 28px 28px 0 0;
+      padding: 32px 24px 40px;
+      width: 100%;
+      max-width: 480px;
+      animation: modal-up 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes modal-up {
+      from {
+        transform: translateY(100%);
+      }
+
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .modal-handle {
+      width: 40px;
+      height: 4px;
+      background: #E5E5E5;
+      border-radius: 4px;
+      margin: 0 auto 24px;
+    }
+
+    .modal-title {
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .modal-subtitle {
+      font-size: 14px;
+      color: #777;
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .input-group {
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .code-input {
+      width: 100%;
+      border: 3px solid #E5E5E5;
+      border-radius: 14px;
+      padding: 16px 18px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .code-input:focus {
+      border-color: var(--green);
+    }
+
+    .code-input.error {
+      border-color: var(--red);
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-8px);
+      }
+
+      75% {
+        transform: translateX(8px);
+      }
+    }
+
+    .input-hint {
+      font-size: 12px;
+      color: var(--gray);
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .input-hint span {
+      color: var(--green);
+    }
+
+    /* =================== QR SCANNER =================== */
+    .qr-scanner-wrap {
+      position: relative;
+      width: 100%;
+      border-radius: 20px;
+      overflow: hidden;
+      background: #000;
+      margin-bottom: 16px;
+      aspect-ratio: 1;
+      max-height: 300px;
+    }
+
+    #qr-video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    #qr-canvas {
+      display: none;
+    }
+
+    /* Scan frame overlay */
+    .qr-frame {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .qr-corner {
+      position: absolute;
+      width: 160px;
+      height: 160px;
+    }
+
+    .qr-corner::before,
+    .qr-corner::after {
+      content: '';
+      position: absolute;
+      background: var(--green);
+      border-radius: 4px;
+    }
+
+    .qr-corner.tl::before {
+      top: 0;
+      left: 0;
+      width: 40px;
+      height: 5px;
+    }
+
+    .qr-corner.tl::after {
+      top: 0;
+      left: 0;
+      width: 5px;
+      height: 40px;
+    }
+
+    .qr-corner.tr::before {
+      top: 0;
+      right: 0;
+      width: 40px;
+      height: 5px;
+    }
+
+    .qr-corner.tr::after {
+      top: 0;
+      right: 0;
+      width: 5px;
+      height: 40px;
+    }
+
+    .qr-corner.bl::before {
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 5px;
+    }
+
+    .qr-corner.bl::after {
+      bottom: 0;
+      left: 0;
+      width: 5px;
+      height: 40px;
+    }
+
+    .qr-corner.br::before {
+      bottom: 0;
+      right: 0;
+      width: 40px;
+      height: 5px;
+    }
+
+    .qr-corner.br::after {
+      bottom: 0;
+      right: 0;
+      width: 5px;
+      height: 40px;
+    }
+
+    /* Animated scan line */
+    .qr-scanline {
+      position: absolute;
+      left: calc(50% - 80px);
+      top: calc(50% - 80px);
+      width: 160px;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      border-radius: 2px;
+      animation: qr-scan 2s ease-in-out infinite;
+      box-shadow: 0 0 8px var(--green);
+    }
+
+    @keyframes qr-scan {
+      0% {
+        transform: translateY(0px);
+        opacity: 1;
+      }
+
+      50% {
+        transform: translateY(156px);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(0px);
+        opacity: 1;
+      }
+    }
+
+    /* Status bar inside camera */
+    .qr-status-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+      color: white;
+      padding: 24px 14px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .qr-status-bar.found {
+      background: linear-gradient(transparent, rgba(88, 204, 2, 0.85));
+    }
+
+    /* Permission denied state */
+    .qr-permission-denied {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 32px 20px;
+      text-align: center;
+      background: #1a1a2e;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+
+    .qr-permission-denied .icon {
+      font-size: 52px;
+    }
+
+    .qr-permission-denied p {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.75);
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .qr-permission-denied .hint {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    /* =================== CHARACTER SCREEN =================== */
+    #screen-character {
+      background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #screen-character::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(88, 204, 2, 0.15) 0%, transparent 70%);
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .char-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .back-btn {
+      background: rgba(255, 255, 255, 0.15);
+      border: none;
+      border-radius: 12px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      color: white;
+      transition: background 0.2s;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .team-logo {
+      font-size: 13px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .team-logo span {
+      color: var(--green);
+    }
+
+    .char-content {
+      padding: 0 24px 40px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .char-avatar {
+      font-size: 100px;
+      display: block;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 0 40px rgba(88, 204, 2, 0.4));
+      animation: hero-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes hero-glow {
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 30px rgba(88, 204, 2, 0.3));
+        transform: scale(1);
+      }
+
+      50% {
+        filter: drop-shadow(0 0 60px rgba(88, 204, 2, 0.6));
+        transform: scale(1.03);
+      }
+    }
+
+    .char-period-badge {
+      display: inline-block;
+      background: rgba(88, 204, 2, 0.2);
+      border: 2px solid rgba(88, 204, 2, 0.5);
+      border-radius: 100px;
+      padding: 6px 18px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--green-light);
+      margin-bottom: 16px;
+      letter-spacing: 0.5px;
+    }
+
+    .char-name {
+      font-size: 36px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 6px;
+      text-shadow: 0 2px 20px rgba(88, 204, 2, 0.3);
+    }
+
+    .char-title-text {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.65);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .char-years {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.4);
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .char-desc {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 16px;
+      padding: 20px;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 600;
+      line-height: 1.6;
+      margin-bottom: 28px;
+      text-align: left;
+    }
+
+    .char-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .char-stat-item {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 14px 8px;
+      text-align: center;
+    }
+
+    .char-stat-item .icon {
+      font-size: 24px;
+      margin-bottom: 6px;
+    }
+
+    .char-stat-item .label {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .char-stat-item .value {
+      font-size: 13px;
+      color: white;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    /* =================== LEARNING SCREEN =================== */
+    #screen-learning {
+      background: #F7F7F7;
+      min-height: 100vh;
+    }
+
+    .learn-header {
+      background: white;
+      border-bottom: 2px solid #E5E5E5;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .progress-bar-container {
+      flex: 1;
+      height: 12px;
+      background: #E5E5E5;
+      border-radius: 100px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green) 0%, var(--green-light) 100%);
+      border-radius: 100px;
+      width: 35%;
+      transition: width 1s ease;
+    }
+
+    .xp-badge {
+      background: var(--yellow);
+      border-radius: 100px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .learn-content {
+      padding: 20px 20px 120px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* Video section */
+    .video-card {
+      background: #1a1a2e;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px 0;
+    }
+
+    .video-header h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: white;
+    }
+
+    .live-badge {
+      background: var(--red);
+      border-radius: 100px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 800;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      animation: pulse-badge 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-badge {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      margin: 14px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .video-placeholder {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+    }
+
+    .video-placeholder .play-btn {
+      width: 64px;
+      height: 64px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      margin-bottom: 12px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.2s;
+    }
+
+    .video-placeholder:hover .play-btn {
+      background: rgba(88, 204, 2, 0.3);
+      border-color: var(--green);
+    }
+
+    .video-placeholder p {
+      font-size: 14px;
+      font-weight: 700;
+      opacity: 0.8;
+    }
+
+    /* Chat section */
+    .chat-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .chat-card-header {
+      padding: 16px 20px;
+      border-bottom: 2px solid #F0F0F0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-avatar {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #58CC02, #89E219);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .chat-card-header h3 {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .chat-card-header p {
+      font-size: 12px;
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .chat-messages {
+      height: 280px;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+      background: #E5E5E5;
+      border-radius: 4px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 8px;
+      max-width: 85%;
+    }
+
+    .msg.user {
+      flex-direction: row-reverse;
+      align-self: flex-end;
+    }
+
+    .msg-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      align-self: flex-end;
+    }
+
+    .msg.ai .msg-avatar {
+      background: linear-gradient(135deg, #58CC02, #89E219);
+    }
+
+    .msg.user .msg-avatar {
+      background: var(--blue);
+    }
+
+    .msg-bubble {
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .msg.ai .msg-bubble {
+      background: #F0F0F0;
+      color: var(--text);
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg.user .msg-bubble {
+      background: var(--blue);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      padding: 12px 16px;
+    }
+
+    .typing-dots span {
+      width: 8px;
+      height: 8px;
+      background: var(--gray);
+      border-radius: 50%;
+      animation: typing-dot 1.4s ease-in-out infinite;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing-dot {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(1);
+        opacity: 0.4;
+      }
+
+      40% {
+        transform: scale(1.2);
+        opacity: 1;
+      }
+    }
+
+    .chat-input-area {
+      padding: 12px;
+      border-top: 2px solid #F0F0F0;
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input {
+      flex: 1;
+      border: 2px solid #E5E5E5;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+
+    .chat-input:focus {
+      border-color: var(--green);
+    }
+
+    .send-btn {
+      width: 44px;
+      height: 44px;
+      background: var(--green);
+      border: none;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 0 3px 0 var(--green-dark);
+      transition: all 0.1s;
+      flex-shrink: 0;
+    }
+
+    .send-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 var(--green-dark);
+    }
+
+    .send-btn:disabled {
+      background: var(--gray);
+      box-shadow: 0 3px 0 #999;
+      cursor: not-allowed;
+    }
+
+    .quick-questions {
+      padding: 0 16px 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .quick-btn {
+      background: #F0FFF0;
+      border: 2px solid var(--green-bg);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green-dark);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .quick-btn:hover {
+      background: var(--green-bg);
+      border-color: var(--green);
+    }
+
+    /* Play button section */
+    .play-section {
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      text-align: center;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+
+    .play-section h3 {
+      font-size: 18px;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+
+    .play-section p {
+      font-size: 13px;
+      color: #777;
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+
+    .countdown-ring {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 20px;
+    }
+
+    .countdown-ring svg {
+      transform: rotate(-90deg);
+    }
+
+    .countdown-ring circle {
+      fill: none;
+      stroke-width: 6;
+      stroke-linecap: round;
+    }
+
+    .ring-bg {
+      stroke: #E5E5E5;
+    }
+
+    .ring-fill {
+      stroke: var(--green);
+      stroke-dasharray: 226;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear;
+    }
+
+    .countdown-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 26px;
+      font-weight: 900;
+      color: var(--text);
+    }
+
+    .btn-play {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--green);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      padding: 18px 32px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 18px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 6px 0 var(--green-dark);
+      transition: all 0.1s;
+      width: 100%;
+      text-transform: uppercase;
+    }
+
+    .btn-play:disabled {
+      background: #E5E5E5;
+      color: var(--gray);
+      box-shadow: 0 4px 0 #CCC;
+      cursor: not-allowed;
+    }
+
+    .btn-play:not(:disabled):hover {
+      background: var(--green-light);
+    }
+
+    .btn-play:not(:disabled):active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 var(--green-dark);
+    }
+
+    /* =================== TOAST =================== */
+    .toast {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: var(--text);
+      color: white;
+      border-radius: 14px;
+      padding: 12px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.3s;
+      white-space: nowrap;
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast.success {
+      background: var(--green);
+    }
+
+    .toast.error {
+      background: var(--red);
+    }
+
+    /* =================== RESPONSIVE =================== */
+    @media (max-width: 360px) {
+      .mascot {
+        font-size: 90px;
+      }
+
+      .hero-title {
+        font-size: 24px;
+      }
+
+      .feature-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* =================== GAME SCREEN =================== */
+    #screen-game {
+      background: linear-gradient(180deg, #080820 0%, #0d1635 100%);
+      min-height: 100vh;
+    }
+
+    .game-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .game-back-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      border-radius: 10px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .game-qnum {
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 1px;
+    }
+
+    .game-lifelines {
+      display: flex;
+      gap: 6px;
+    }
+
+    .game-lifeline-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 215, 0, 0.45);
+      background: rgba(255, 215, 0, 0.08);
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .game-lifeline-btn:hover:not(:disabled) {
+      background: rgba(255, 215, 0, 0.22);
+    }
+
+    .game-lifeline-btn:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
+
+    .game-timer-wrap {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      flex-shrink: 0;
+    }
+
+    .game-timer-wrap svg {
+      transform: rotate(-90deg);
+    }
+
+    .game-timer-wrap circle {
+      fill: none;
+      stroke-width: 4;
+    }
+
+    .t-bg {
+      stroke: rgba(255, 255, 255, 0.12);
+    }
+
+    .t-fill {
+      stroke: #58CC02;
+      stroke-linecap: round;
+      stroke-dasharray: 88;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 1s linear, stroke 0.3s;
+    }
+
+    .t-num {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 11px;
+      font-weight: 900;
+      color: white;
+    }
+
+    /* Prize strip */
+    .game-prize-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 14px;
+      background: rgba(255, 215, 0, 0.05);
+      border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+    }
+
+    .game-prize-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: rgba(255, 215, 0, 0.65);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .game-prize-value {
+      font-size: 18px;
+      font-weight: 900;
+      color: #FFD700;
+      text-shadow: 0 0 16px rgba(255, 215, 0, 0.4);
+    }
+
+    .prize-dots {
+      display: flex;
+      gap: 3px;
+    }
+
+    .p-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+      transition: all 0.3s;
+    }
+
+    .p-dot.done {
+      background: var(--green);
+    }
+
+    .p-dot.cur {
+      background: #FFD700;
+      box-shadow: 0 0 7px #FFD700;
+      transform: scale(1.2);
+    }
+
+    .p-dot.mile {
+      border: 2px solid rgba(255, 215, 0, 0.6);
+    }
+
+    /* Question card */
+    .game-q-card {
+      margin: 14px;
+      background: rgba(255, 255, 255, 0.07);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 18px;
+      padding: 22px 18px;
+      min-height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .game-diff-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 100px;
+      font-size: 10px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .d-easy {
+      background: rgba(88, 204, 2, .18);
+      color: #89E219;
+      border: 1px solid rgba(88, 204, 2, .3);
+    }
+
+    .d-med {
+      background: rgba(255, 150, 0, .18);
+      color: #FFB347;
+      border: 1px solid rgba(255, 150, 0, .3);
+    }
+
+    .d-hard {
+      background: rgba(255, 75, 75, .18);
+      color: #FF7777;
+      border: 1px solid rgba(255, 75, 75, .3);
+    }
+
+    .game-q-text {
+      font-size: 16px;
+      font-weight: 800;
+      color: white;
+      line-height: 1.55;
+    }
+
+    /* Answer grid */
+    .game-answers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+      padding: 0 14px 14px;
+    }
+
+    .g-ans-btn {
+      background: rgba(255, 255, 255, 0.07);
+      border: 2px solid rgba(255, 255, 255, 0.13);
+      border-radius: 13px;
+      padding: 12px 10px;
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      transition: all 0.15s;
+      min-height: 60px;
+      line-height: 1.3;
+    }
+
+    .g-ans-btn:hover:not(:disabled):not(.elim) {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.32);
+      transform: translateY(-1px);
+    }
+
+    .g-ans-btn:disabled {
+      cursor: not-allowed;
+    }
+
+    .g-ans-btn.elim {
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .g-letter {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: rgba(255, 215, 0, 0.12);
+      border: 1.5px solid rgba(255, 215, 0, 0.4);
+      color: #FFD700;
+      font-size: 11px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .g-ans-btn.sel {
+      background: rgba(28, 176, 246, .2);
+      border-color: var(--blue);
+    }
+
+    .g-ans-btn.sel .g-letter {
+      background: var(--blue);
+      border-color: var(--blue);
+      color: white;
+    }
+
+    .g-ans-btn.correct {
+      background: rgba(88, 204, 2, .25);
+      border-color: var(--green);
+      animation: ac .4s ease;
+    }
+
+    .g-ans-btn.correct .g-letter {
+      background: var(--green);
+      border-color: var(--green);
+      color: white;
+    }
+
+    .g-ans-btn.wrong {
+      background: rgba(255, 75, 75, .2);
+      border-color: var(--red);
+    }
+
+    .g-ans-btn.wrong .g-letter {
+      background: var(--red);
+      border-color: var(--red);
+      color: white;
+    }
+
+    @keyframes ac {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.03)
+      }
+    }
+
+    /* Audience overlay */
+    .game-aud-overlay,
+    .game-friend-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 500;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .game-aud-overlay.active,
+    .game-friend-overlay.active {
+      display: flex;
+    }
+
+    .game-aud-box,
+    .game-friend-box {
+      background: #0d1635;
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      border-radius: 22px 22px 0 0;
+      padding: 22px;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .aud-title,
+    .friend-title {
+      font-size: 15px;
+      font-weight: 900;
+      color: #FFD700;
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .aud-bars {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+      height: 90px;
+    }
+
+    .aud-bw {
+      flex: 1;
+      text-align: center;
+    }
+
+    .aud-bar {
+      background: linear-gradient(180deg, #FFD700, #FF9600);
+      border-radius: 5px 5px 0 0;
+      width: 100%;
+      min-height: 3px;
+      transition: height .8s cubic-bezier(.34, 1.56, .64, 1);
+    }
+
+    .aud-ltr {
+      font-size: 12px;
+      font-weight: 800;
+      color: white;
+      margin-top: 5px;
+    }
+
+    .aud-pct {
+      font-size: 11px;
+      font-weight: 700;
+      color: #FFD700;
+    }
+
+    .friend-hint {
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, .85);
+      text-align: center;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    /* End overlay */
+    .game-end-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(8, 8, 32, .96);
+      z-index: 900;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 28px;
+    }
+
+    .game-end-overlay.active {
+      display: flex;
+    }
+
+    .ge-icon {
+      font-size: 76px;
+      margin-bottom: 14px;
+      animation: wi .6s ease;
+    }
+
+    @keyframes wi {
+      0% {
+        transform: scale(.2);
+        opacity: 0
+      }
+
+      60% {
+        transform: scale(1.15)
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1
+      }
+    }
+
+    .ge-title {
+      font-size: 26px;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 6px;
+    }
+
+    .ge-sub {
+      font-size: 14px;
+      color: rgba(255, 255, 255, .55);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .ge-score {
+      font-size: 52px;
+      font-weight: 900;
+      color: #FFD700;
+      text-shadow: 0 0 36px rgba(255, 215, 0, .5);
+      margin: 14px 0;
+    }
+
+    .ge-score-lbl {
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255, 215, 0, .7);
+      margin-bottom: 24px;
+    }
+
+    .ge-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 28px;
+    }
+
+    .ge-stat {
+      background: rgba(255, 255, 255, .06);
+      border-radius: 13px;
+      padding: 13px;
+    }
+
+    .ge-stat-n {
+      font-size: 22px;
+      font-weight: 900;
+      color: white;
+    }
+
+    .ge-stat-l {
+      font-size: 10px;
+      color: rgba(255, 255, 255, .45);
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .game-milestone-toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: linear-gradient(135deg, #FFD700, #FF9600);
+      color: #1a1a00;
+      font-size: 18px;
+      font-weight: 900;
+      padding: 16px 32px;
+      border-radius: 20px;
+      z-index: 800;
+      text-align: center;
+      transition: transform 0.4s cubic-bezier(.34, 1.56, .64, 1), opacity 0.3s;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .game-milestone-toast.show {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="#" class="nav-logo" onclick="goToScreen('landing')">
+      <span>🏛️</span> HistoryHero
+    </a>
+    <button class="nav-btn" onclick="goToScreen('landing')">🏠 Trang chủ</button>
+  </nav>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ===================== SCREEN: LANDING ===================== -->
+  <div id="screen-landing" class="screen active">
+    <section class="hero-section">
+      <div class="hero-bg-circles"></div>
+      <div class="mascot-container">
+        <span class="mascot">🦉</span>
+        <div class="mascot-badge">⭐</div>
+      </div>
+      <h1 class="hero-title">Học Lịch Sử<br><span class="highlight">Thật Vui!</span></h1>
+      <p class="hero-subtitle">Khám phá anh hùng dân tộc qua AI tương tác</p>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:12px; padding:0 24px;">
+        <button class="btn-primary" onclick="openCodeModal()">🚀 Bắt Đầu Học</button>
+        <button class="btn-secondary" onclick="scrollToReview()">📚 Ôn tập kiến thức</button>
+      </div>
+    </section>
+
+    <!-- REVIEW SECTION -->
+    <section class="review-section" id="review-section">
+      <h2 class="section-title">📚 Ôn Tập Kiến Thức</h2>
+      <div class="tab-container">
+        <div class="tab-header">
+          <button class="tab-btn active" onclick="switchTab(0)">📖 Học</button>
+          <button class="tab-btn" onclick="switchTab(1)">🏆 Xếp hạng</button>
+          <button class="tab-btn" onclick="switchTab(2)">📊 Tiến độ</button>
+        </div>
+
+        <div class="tab-content active" id="tab-0">
+          <div class="illustration-container">
+            <div class="illustration-img">⚔️</div>
+          </div>
+          <div class="action-buttons">
+            <button class="btn-action" onclick="openQRModal()">
+              <span class="icon">📱</span>
+              <span class="text-group">
+                <span class="text-main">Quét Mã QR</span>
+                <span class="text-sub">Dùng camera điện thoại</span>
+              </span>
+              <span>›</span>
+            </button>
+            <button class="btn-action" onclick="openCodeModal()">
+              <span class="icon">🔑</span>
+              <span class="text-group">
+                <span class="text-main">Nhập Mã Code</span>
+                <span class="text-sub">Dùng mã từ giáo viên</span>
+              </span>
+              <span>›</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-1">
+          <div style="text-align:center; padding:20px 0;">
+            <div style="font-size:48px; margin-bottom:12px;">🏆</div>
+            <h3 style="font-size:18px; font-weight:800; margin-bottom:8px;">Bảng Xếp Hạng</h3>
+            <p style="font-size:14px; color:#777; font-weight:600;">Hoàn thành bài học để lên bảng xếp hạng!</p>
+            <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
+              <div
+                style="background:#FFF9C4; border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:20px;">🥇</span>
+                <span style="flex:1; font-weight:800;">Nguyễn An</span>
+                <span style="font-weight:900; color:#CE9B00;">2450 XP</span>
+              </div>
+              <div
+                style="background:#F5F5F5; border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:20px;">🥈</span>
+                <span style="flex:1; font-weight:800;">Trần Bảo</span>
+                <span style="font-weight:900; color:#777;">1980 XP</span>
+              </div>
+              <div
+                style="background:#FFF3E0; border-radius:12px; padding:12px 16px; display:flex; align-items:center; gap:12px;">
+                <span style="font-size:20px;">🥉</span>
+                <span style="flex:1; font-weight:800;">Lê Hoa</span>
+                <span style="font-weight:900; color:#FF9600;">1650 XP</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-2">
+          <div style="text-align:center; padding:10px 0;">
+            <div style="font-size:48px; margin-bottom:12px;">📊</div>
+            <h3 style="font-size:18px; font-weight:800; margin-bottom:16px;">Tiến Độ Của Bạn</h3>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+              <div style="background:#E8F5E9; border-radius:14px; padding:16px;">
+                <div style="font-size:28px; font-weight:900; color:var(--green);">0</div>
+                <div style="font-size:11px; font-weight:700; color:#666; text-transform:uppercase;">Bài đã học</div>
+              </div>
+              <div style="background:#E3F2FD; border-radius:14px; padding:16px;">
+                <div style="font-size:28px; font-weight:900; color:var(--blue);">0</div>
+                <div style="font-size:11px; font-weight:700; color:#666; text-transform:uppercase;">Chuỗi ngày</div>
+              </div>
+              <div style="background:#FFF8E1; border-radius:14px; padding:16px;">
+                <div style="font-size:28px; font-weight:900; color:var(--yellow-dark);">0</div>
+                <div style="font-size:11px; font-weight:700; color:#666; text-transform:uppercase;">XP tích lũy</div>
+              </div>
+              <div style="background:#FCE4EC; border-radius:14px; padding:16px;">
+                <div style="font-size:28px; font-weight:900; color:#E91E63;">0%</div>
+                <div style="font-size:11px; font-weight:700; color:#666; text-transform:uppercase;">Chính xác</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="about-section">
+      <div class="about-inner">
+        <h2 class="section-title">🌟 Về Dự Án</h2>
+        <p style="font-size:15px; color:#555; font-weight:600; line-height:1.7; margin-bottom:20px;">
+          <strong>HistoryHero</strong> là nền tảng học lịch sử Việt Nam tương tác, sử dụng AI để giúp học sinh khám phá
+          và hiểu sâu về các anh hùng dân tộc qua hình thức trò chuyện và trò chơi hấp dẫn.
+        </p>
+        <div class="feature-cards">
+          <div class="feature-card">
+            <div class="icon">🤖</div>
+            <h3>AI Tương Tác</h3>
+            <p>Trò chuyện với nhân vật lịch sử</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🎮</div>
+            <h3>Học Qua Trò Chơi</h3>
+            <p>Mini game hấp dẫn</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🎬</div>
+            <h3>Video 3D</h3>
+            <p>Trực quan sinh động</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🏆</div>
+            <h3>Thành Tích</h3>
+            <p>Xếp hạng và phần thưởng</p>
+          </div>
+        </div>
+        <div class="stats-row">
+          <div class="stat-item">
+            <div class="stat-number">10+</div>
+            <div class="stat-label">Nhân vật</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Học sinh</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">98%</div>
+            <div class="stat-label">Hài lòng</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== SCREEN: CHARACTER ===================== -->
+  <div id="screen-character" class="screen">
+    <div class="char-header">
+      <button class="back-btn" onclick="goToScreen('landing')">←</button>
+      <div class="team-logo">✨ <span>HISTORY</span>HERO</div>
+      <div style="width:42px;"></div>
+    </div>
+    <div class="char-content">
+      <span class="char-avatar" id="char-emoji">⚔️</span>
+      <div class="char-period-badge" id="char-period">🕐 Nhà Trần - Thế kỷ XIII</div>
+      <h1 class="char-name" id="char-name">Trần Hưng Đạo</h1>
+      <p class="char-title-text" id="char-title">Hưng Đạo Đại Vương</p>
+      <p class="char-years" id="char-years">1228 — 1300</p>
+      <div class="char-desc" id="char-desc">
+        Vị tướng tài ba, anh hùng dân tộc, ba lần đánh thắng quân Mông-Nguyên, bảo vệ nền độc lập của Đại Việt.
+      </div>
+      <div class="char-stats">
+        <div class="char-stat-item">
+          <div class="icon">⚔️</div>
+          <div class="label">Chiến thắng</div>
+          <div class="value">3 lần</div>
+        </div>
+        <div class="char-stat-item">
+          <div class="icon">📜</div>
+          <div class="label">Tác phẩm</div>
+          <div class="value">3 sách</div>
+        </div>
+        <div class="char-stat-item">
+          <div class="icon">⭐</div>
+          <div class="label">Danh hiệu</div>
+          <div class="value">Đức Thánh</div>
+        </div>
+      </div>
+      <button class="btn-primary" onclick="goToScreen('learning')" style="max-width:100%;">
+        ⚔️ Bắt Đầu Học
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== SCREEN: LEARNING ===================== -->
+  <div id="screen-learning" class="screen">
+    <div class="learn-header">
+      <button class="back-btn" style="background:none; border:none; font-size:22px; cursor:pointer;"
+        onclick="goToScreen('character')">←</button>
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+      <div class="xp-badge">⭐ 0 XP</div>
+    </div>
+
+    <div class="learn-content">
+      <!-- VIDEO -->
+      <div class="video-card">
+        <div class="video-header">
+          <h3>🎬 Trần Hưng Đạo - Nhân Vật 3D</h3>
+          <span class="live-badge">● Mới</span>
+        </div>
+        <div class="video-wrapper">
+          <div class="video-placeholder" onclick="playVideo(this)">
+            <div class="play-btn">▶</div>
+            <p>Nhấn để xem video nhân vật 3D</p>
+          </div>
+          <iframe id="youtube-iframe" src=""
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen style="display:none;"></iframe>
+        </div>
+      </div>
+
+      <!-- CHAT -->
+      <div class="chat-card">
+        <div class="chat-card-header">
+          <div class="chat-avatar">⚔️</div>
+          <div>
+            <h3>Hỏi về Trần Hưng Đạo</h3>
+            <p>🟢 AI đang hoạt động</p>
+          </div>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+          <div class="msg ai">
+            <div class="msg-avatar">⚔️</div>
+            <div class="msg-bubble">
+              Xin chào! Ta là trợ lý AI về Trần Hưng Đạo. Hãy hỏi ta bất kỳ điều gì về vị anh hùng dân tộc này! ⚔️
+            </div>
+          </div>
+        </div>
+        <div class="quick-questions">
+          <button class="quick-btn" onclick="sendQuickQuestion('Trần Hưng Đạo là ai?')">Là ai?</button>
+          <button class="quick-btn" onclick="sendQuickQuestion('Ba lần kháng chiến là gì?')">3 lần kháng chiến</button>
+          <button class="quick-btn" onclick="sendQuickQuestion('Chiến thuật nổi tiếng của ông?')">Chiến thuật</button>
+          <button class="quick-btn" onclick="sendQuickQuestion('Hịch tướng sĩ là gì?')">Hịch tướng sĩ</button>
+        </div>
+        <div class="chat-input-area">
+          <textarea class="chat-input" id="chat-input" rows="1" placeholder="Hỏi về Trần Hưng Đạo..."
+            onkeydown="handleChatKey(event)"></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+        </div>
+      </div>
+
+      <!-- PLAY BUTTON -->
+      <div class="play-section">
+        <h3>🎮 Sẵn Sàng Chơi Game?</h3>
+        <p>Xem video và tìm hiểu 60 giây để mở khóa mini game!</p>
+        <div class="countdown-ring">
+          <svg viewBox="0 0 80 80" width="90" height="90">
+            <circle class="ring-bg" cx="40" cy="40" r="36" />
+            <circle class="ring-fill" id="ring-fill" cx="40" cy="40" r="36" />
+          </svg>
+          <div class="countdown-number" id="countdown-num">60</div>
+        </div>
+        <button class="btn-play" id="play-btn" disabled onclick="startGame()">
+          🔒 Mở khóa sau <span id="play-btn-countdown">60</span> giây
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: CODE ===================== -->
+  <div class="modal-overlay" id="modal-code">
+    <div class="modal-box">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title">🔑 Nhập Mã Code</h2>
+      <p class="modal-subtitle">Nhập mã từ giáo viên hoặc tài liệu học tập</p>
+      <div class="input-group">
+        <input type="text" class="code-input" id="code-input" placeholder="VD: THD2025" maxlength="10"
+          oninput="this.value = this.value.toUpperCase()" />
+      </div>
+      <p class="input-hint">Demo: nhập <span>THD2025</span> để trải nghiệm</p>
+      <button class="btn-primary" onclick="submitCode()" style="max-width:100%; margin-bottom:12px;">
+        ✅ Xác Nhận
+      </button>
+      <button class="btn-secondary" onclick="closeModals()" style="max-width:100%;">
+        Hủy
+      </button>
+    </div>
+  </div>
+
+  <!-- ===================== MODAL: QR ===================== -->
+  <div class="modal-overlay" id="modal-qr">
+    <div class="modal-box">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title">📱 Quét Mã QR</h2>
+      <p class="modal-subtitle" id="qr-subtitle">Hướng camera vào mã QR trên tài liệu</p>
+
+      <!-- Camera viewport -->
+      <div class="qr-scanner-wrap" id="qr-scanner-wrap">
+        <video id="qr-video" playsinline autoplay muted></video>
+        <canvas id="qr-canvas"></canvas>
+        <div class="qr-frame">
+          <div class="qr-corner tl"></div>
+          <div class="qr-corner tr"></div>
+          <div class="qr-corner bl"></div>
+          <div class="qr-corner br"></div>
+          <div class="qr-scanline"></div>
+        </div>
+        <div class="qr-status-bar" id="qr-status">🔍 Đang tìm mã QR...</div>
+      </div>
+
+      <!-- Permission denied fallback -->
+      <div class="qr-permission-denied" id="qr-denied">
+        <div class="icon">📵</div>
+        <p>Không thể truy cập camera.<br>Vui lòng cho phép quyền camera trong trình duyệt.</p>
+        <p class="hint">Hoặc dùng nút bên dưới để nhập mã thủ công.</p>
+      </div>
+
+      <button class="btn-primary" onclick="closeModals(); setTimeout(openCodeModal, 200)"
+        style="max-width:100%; margin-bottom:12px;">
+        🔑 Nhập Mã Thủ Công
+      </button>
+      <button class="btn-secondary" onclick="closeModals()" style="max-width:100%;">Đóng</button>
+    </div>
+  </div>
+
+  <script>
+    // ========== NAVIGATION ==========
+    // API Base URL - tự động chuyển giữa local và production
+    const API_BASE = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3001'
+      : '';  // Dùng relative path khi deploy (cùng domain)
+    let chatHistory = [];
+    let countdownTimer = null;
+    let countdownValue = 60;
+    let isCountdownStarted = false;
+
+    function goToScreen(name) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('screen-' + name).classList.add('active');
+      window.scrollTo(0, 0);
+      if (name === 'learning' && !isCountdownStarted) startCountdown();
+    }
+
+    function scrollToReview() {
+      document.getElementById('review-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // ========== TABS ==========
+    function switchTab(index) {
+      document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === index);
+      });
+      document.querySelectorAll('.tab-content').forEach((c, i) => {
+        c.classList.toggle('active', i === index);
+      });
+    }
+
+    // ========== MODALS ==========
+    function openCodeModal() {
+      closeModals();
+      document.getElementById('modal-code').classList.add('active');
+      setTimeout(() => document.getElementById('code-input').focus(), 300);
+    }
+    // ========== QR SCANNER ==========
+    let qrStream = null;
+    let qrAnimFrame = null;
+    let qrFoundLock = false;
+
+    function openQRModal() {
+      closeModals();
+      document.getElementById('modal-qr').classList.add('active');
+      qrFoundLock = false;
+      startQRCamera();
+    }
+
+    async function startQRCamera() {
+      const video = document.getElementById('qr-video');
+      const canvas = document.getElementById('qr-canvas');
+      const wrap = document.getElementById('qr-scanner-wrap');
+      const denied = document.getElementById('qr-denied');
+      const status = document.getElementById('qr-status');
+      const subtitle = document.getElementById('qr-subtitle');
+
+      // Reset UI
+      wrap.style.display = 'block';
+      denied.style.display = 'none';
+      status.textContent = '🔍 Đang tìm mã QR...';
+      status.classList.remove('found');
+
+      // Prefer rear camera on mobile
+      const constraints = {
+        video: {
+          facingMode: { ideal: 'environment' },
+          width: { ideal: 640 },
+          height: { ideal: 640 }
+        }
+      };
+
+      try {
+        qrStream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = qrStream;
+        video.play();
+        subtitle.textContent = 'Hướng camera vào mã QR trên tài liệu';
+        // Wait for video metadata before scanning
+        video.addEventListener('loadedmetadata', tickQR);
+      } catch (err) {
+        // Camera unavailable or denied
+        wrap.style.display = 'none';
+        denied.style.display = 'flex';
+        subtitle.textContent = 'Không thể truy cập camera';
+        console.warn('QR camera error:', err);
+      }
+    }
+
+    function tickQR() {
+      const video = document.getElementById('qr-video');
+      const canvas = document.getElementById('qr-canvas');
+      const status = document.getElementById('qr-status');
+
+      if (!document.getElementById('modal-qr').classList.contains('active')) {
+        stopQRCamera();
+        return;
+      }
+      if (qrFoundLock) return;
+
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: 'dontInvert',
+        });
+
+        if (code && code.data) {
+          const raw = code.data.trim().toUpperCase();
+          qrFoundLock = true;
+          status.textContent = '✅ Đã nhận mã: ' + raw;
+          status.classList.add('found');
+          // Vibrate if supported
+          if (navigator.vibrate) navigator.vibrate(200);
+          // Auto-submit after short pause
+          setTimeout(() => {
+            stopQRCamera();
+            closeModals();
+            document.getElementById('code-input').value = raw;
+            showToast('📷 QR đã quét: ' + raw, 'success');
+            submitCode();
+          }, 800);
+          return;
+        }
+      }
+
+      qrAnimFrame = requestAnimationFrame(tickQR);
+    }
+
+    function stopQRCamera() {
+      if (qrAnimFrame) { cancelAnimationFrame(qrAnimFrame); qrAnimFrame = null; }
+      if (qrStream) { qrStream.getTracks().forEach(t => t.stop()); qrStream = null; }
+      const video = document.getElementById('qr-video');
+      video.srcObject = null;
+    }
+    function closeModals() {
+      document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+      stopQRCamera();
+    }
+
+    // Click outside to close
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModals();
+      });
+    });
+
+    // ========== CODE VALIDATION ==========
+    async function submitCode() {
+      const code = document.getElementById('code-input').value.trim();
+      if (!code) {
+        showToast('Vui lòng nhập mã code!', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE}/api/validate-code`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+          closeModals();
+          updateCharacterScreen(data.character);
+          showToast('✅ Mã hợp lệ! Chào mừng!', 'success');
+          setTimeout(() => goToScreen('character'), 500);
+        } else {
+          const input = document.getElementById('code-input');
+          input.classList.add('error');
+          setTimeout(() => input.classList.remove('error'), 500);
+          showToast(data.message || 'Mã không hợp lệ!', 'error');
+        }
+      } catch (err) {
+        // If backend not available, use demo mode
+        if (code === 'THD2025' || code === 'THD' || code === 'DEMO123') {
+          closeModals();
+          showToast('✅ Demo mode! Chào mừng!', 'success');
+          setTimeout(() => goToScreen('character'), 500);
+        } else {
+          showToast('Không thể kết nối server. Thử lại!', 'error');
+        }
+      }
+    }
+
+    // Enter key for code input
+    document.getElementById('code-input').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submitCode();
+    });
+
+    function updateCharacterScreen(char) {
+      if (!char) return;
+      if (char.name) document.getElementById('char-name').textContent = char.name;
+      if (char.title) document.getElementById('char-title').textContent = char.title;
+      if (char.period) document.getElementById('char-period').textContent = '🕐 ' + char.period;
+      if (char.description) document.getElementById('char-desc').textContent = char.description;
+      if (char.years) document.getElementById('char-years').textContent = char.years.replace('-', '—');
+      if (char.emoji) document.getElementById('char-emoji').textContent = char.emoji;
+    }
+
+    // ========== VIDEO ==========
+    function playVideo(el) {
+      const iframe = document.getElementById('youtube-iframe');
+      // Using a demo YouTube video about Vietnam history
+      iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0';
+      iframe.style.display = 'block';
+      el.style.display = 'none';
+      if (!isCountdownStarted) startCountdown();
+    }
+
+    // ========== COUNTDOWN ==========
+    function startCountdown() {
+      if (isCountdownStarted) return;
+      isCountdownStarted = true;
+      countdownValue = 60;
+      const circumference = 226;
+      const ring = document.getElementById('ring-fill');
+      const numEl = document.getElementById('countdown-num');
+      const btnEl = document.getElementById('play-btn');
+      const btnCountdown = document.getElementById('play-btn-countdown');
+
+      countdownTimer = setInterval(() => {
+        countdownValue--;
+        numEl.textContent = countdownValue;
+        btnCountdown.textContent = countdownValue;
+
+        const offset = circumference * (countdownValue / 60);
+        ring.style.strokeDashoffset = offset;
+
+        if (countdownValue <= 0) {
+          clearInterval(countdownTimer);
+          numEl.textContent = '🎮';
+          btnEl.disabled = false;
+          btnEl.innerHTML = '🎮 Bắt Đầu Chơi Game!';
+          ring.style.stroke = '#FFD900';
+          showToast('🎉 Đã mở khóa! Sẵn sàng chơi game!', 'success');
+
+          // Add XP
+          document.querySelector('.xp-badge').textContent = '⭐ 50 XP';
+          document.getElementById('progress-fill').style.width = '55%';
+        }
+      }, 1000);
+    }
+
+    function startGame() {
+      showToast('🎮 Mini game đang được phát triển! Sớm ra mắt!', 'success');
+    }
+
+    // ========== CHAT ==========
+    async function sendMessage() {
+      const input = document.getElementById('chat-input');
+      const message = input.value.trim();
+      if (!message) return;
+
+      addMessage(message, 'user');
+      input.value = '';
+      input.style.height = 'auto';
+
+      const sendBtn = document.getElementById('send-btn');
+      sendBtn.disabled = true;
+
+      // Show typing indicator
+      const typingId = showTyping();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message, history: chatHistory.slice(-6) })
+        });
+        const data = await res.json();
+
+        removeTyping(typingId);
+
+        if (data.success) {
+          addMessage(data.message, 'ai');
+          chatHistory.push({ role: 'user', content: message });
+          chatHistory.push({ role: 'assistant', content: data.message });
+
+          // Add XP for chatting
+          const current = parseInt(document.querySelector('.xp-badge').textContent.replace(/[^0-9]/g, '')) || 0;
+          document.querySelector('.xp-badge').textContent = `⭐ ${current + 10} XP`;
+        } else {
+          addMessage('❌ ' + (data.error || 'Có lỗi xảy ra'), 'ai');
+        }
+      } catch (err) {
+        removeTyping(typingId);
+        addMessage('⚠️ Không thể kết nối server. Vui lòng chạy backend (npm start trong thư mục backend).', 'ai');
+      }
+
+      sendBtn.disabled = false;
+      if (!isCountdownStarted) startCountdown();
+    }
+
+    function sendQuickQuestion(q) {
+      document.getElementById('chat-input').value = q;
+      sendMessage();
+    }
+
+    function handleChatKey(e) {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+      // Auto resize
+      const input = e.target;
+      input.style.height = 'auto';
+      input.style.height = Math.min(input.scrollHeight, 80) + 'px';
+    }
+
+    function addMessage(text, role) {
+      const container = document.getElementById('chat-messages');
+      const div = document.createElement('div');
+      div.className = `msg ${role}`;
+      div.innerHTML = `
+      <div class="msg-avatar">${role === 'ai' ? '⚔️' : '👤'}</div>
+      <div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>
+    `;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function showTyping() {
+      const container = document.getElementById('chat-messages');
+      const id = 'typing-' + Date.now();
+      const div = document.createElement('div');
+      div.className = 'msg ai';
+      div.id = id;
+      div.innerHTML = `
+      <div class="msg-avatar">⚔️</div>
+      <div class="msg-bubble" style="padding:0;">
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+    `;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+      return id;
+    }
+
+    function removeTyping(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    }
+
+    // ========== TOAST ==========
+    function showToast(msg, type = '') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => {
+        toast.className = 'toast';
+      }, 3000);
+    }
+  </script>
+</body>
+
+</html>

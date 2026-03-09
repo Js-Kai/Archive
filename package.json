@@ -1,0 +1,19 @@
+{
+  "name": "history-hero-app",
+  "version": "1.0.0",
+  "description": "Interactive History Learning App - HistoryHero",
+  "scripts": {
+    "start": "cd backend && npm start",
+    "dev": "cd backend && npm run dev",
+    "install-deps": "cd backend && npm install",
+    "build": "cd backend && npm install",
+    "postinstall": "cd backend && npm install"
+  },
+  "keywords": ["history", "education", "vietnam", "AI", "gemini"],
+  "author": "HistoryHero Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  }
+}
