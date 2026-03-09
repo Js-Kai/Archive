@@ -2322,8 +2322,8 @@
   <script>
     // ========== NAVIGATION ==========
     // API Base URL - tự động chuyển giữa local và production
-    const API_BASE = window.location.hostname === 'localhost' 
-      ? 'http://localhost:3001'
+    const API_BASE = window.location.hostname === 'localhost'
+      ? 'https://archive-78yj.onrender.com'
       : '';  // Dùng relative path khi deploy (cùng domain)
     let chatHistory = [];
     let countdownTimer = null;
