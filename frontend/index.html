@@ -1899,6 +1899,7 @@
       }
     }
 
+
     .ge-title {
       font-size: 26px;
       font-weight: 900;
@@ -1978,6 +1979,70 @@
       transform: translate(-50%, -50%) scale(1);
       opacity: 1;
     }
+    /* ── Answer buttons game ── */
+    .game-ans-btn {
+      background: rgba(255,255,255,0.07);
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 14px;
+      padding: 14px 12px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      min-height: 56px;
+      line-height: 1.4;
+      transition: all 0.2s;
+    }
+    .game-ans-btn:hover:not(:disabled) {
+      background: rgba(255,215,0,0.12);
+      border-color: #FFD700;
+      transform: translateY(-1px);
+    }
+    .game-ans-btn:disabled { cursor: not-allowed; }
+    .game-ans-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 24px;
+      height: 24px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .game-ans-btn.selected { background: rgba(255,215,0,0.18); border-color: #FFD700; }
+    .game-ans-btn.correct  { background: rgba(88,204,2,0.25); border-color: #58CC02; animation: correctPulse 0.5s ease; }
+    .game-ans-btn.wrong    { background: rgba(255,75,75,0.25); border-color: #FF4B4B; animation: wrongShake 0.4s ease; }
+    .game-ans-btn.reveal-correct { background: rgba(88,204,2,0.15); border-color: #58CC02; }
+    .game-ans-btn.eliminated { opacity: 0.2 !important; pointer-events: none !important; }
+    @keyframes correctPulse { 0%{transform:scale(1)} 50%{transform:scale(1.04)} 100%{transform:scale(1)} }
+    @keyframes wrongShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+    /* Prize ladder steps */
+    .prize-step {
+      flex: 0 0 auto;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: rgba(255,255,255,0.5);
+      white-space: nowrap;
+      transition: all 0.3s;
+    }
+    .prize-step.passed  { background: rgba(88,204,2,0.2); border-color: #58CC02; color: #58CC02; }
+    .prize-step.current { background: linear-gradient(135deg,#FFD700,#FFA500); border-color: #FFD700; color: #1a1a00; transform: scale(1.08); box-shadow: 0 2px 12px rgba(255,215,0,0.4); }
+    .prize-step.milestone { border-color: #FF6B35; color: rgba(255,107,53,0.7); }
+    /* Confetti */
+    .confetti-container { position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1000;overflow:hidden; }
+    .confetti-piece { position:absolute;width:10px;height:10px;top:-10px;border-radius:2px;animation:confettiFall linear forwards; }
+    @keyframes confettiFall { to { transform:translateY(110vh) rotate(720deg);opacity:0; } }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 
@@ -2262,6 +2327,106 @@
       </div>
     </div>
   </div>
+ <div id="screen-game" class="screen">
+
+<!-- ===================== SCREEN 4: GAME AI LÀ TRIỆU PHÚ ===================== -->
+    <!-- Header -->
+    <div class="game-header">
+      <button class="game-back-btn" onclick="exitGame()">←</button>
+      <span class="game-qnum" id="game-title-bar">🏆 AI LÀ TRIỆU PHÚ</span>
+      <span class="xp-badge" id="game-xp-display" style="font-size:12px;">⭐ 0 XP</span>
+    </div>
+
+    <!-- Loading -->
+    <div class="game-loading" id="game-loading" style="display:none;text-align:center;padding:60px 20px;">
+      <div style="width:48px;height:48px;border:4px solid rgba(255,255,255,0.1);border-top-color:#FFD700;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+      <p style="color:rgba(255,255,255,0.5);font-size:14px;">Đang tải câu hỏi...</p>
+    </div>
+
+    <!-- Intro -->
+    <div id="game-intro" style="text-align:center;padding:32px 20px;">
+      <div style="font-size:72px;margin-bottom:16px;animation:mascot-float 3s ease-in-out infinite;">🎯</div>
+      <div style="font-size:26px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Ai Là Triệu Phú?</div>
+      <div style="font-size:14px;color:rgba(255,255,255,0.6);line-height:1.6;margin-bottom:24px;">Trả lời 15 câu hỏi về Trần Hưng Đạo<br>để chinh phục đỉnh cao kiến thức!</div>
+      <div style="background:rgba(255,255,255,0.06);border-radius:16px;padding:16px;text-align:left;margin:0 auto 24px;max-width:400px;">
+        <ul style="font-size:13px;color:rgba(255,255,255,0.75);padding-left:20px;margin:0;">
+          <li style="margin-bottom:8px;">🎯 15 câu hỏi, độ khó tăng dần</li>
+          <li style="margin-bottom:8px;">⏱️ Mỗi câu có <strong>30 giây</strong> để trả lời</li>
+          <li style="margin-bottom:8px;">🛟 3 phao: 50:50, Hỏi bạn bè, Nhờ khán giả</li>
+          <li style="margin-bottom:8px;">🏆 3 mốc an toàn: câu 4, câu 7, câu 10</li>
+          <li>⭐ Mỗi câu đúng nhận XP tăng dần</li>
+        </ul>
+      </div>
+      <button onclick="initMillionaireGame()" style="background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;border:none;border-radius:16px;padding:18px 40px;font-size:17px;font-weight:900;font-family:inherit;cursor:pointer;width:100%;max-width:400px;box-shadow:0 6px 24px rgba(255,215,0,0.35);">🚀 Bắt Đầu Chơi!</button>
+    </div>
+
+    <!-- Play Area -->
+    <div id="game-play-area" style="display:none;">
+
+      <!-- Prize Ladder -->
+      <div id="prize-ladder" style="display:flex;gap:6px;padding:12px 16px;overflow-x:auto;scrollbar-width:none;"></div>
+
+      <div style="padding:0 16px;max-width:480px;margin:0 auto;">
+
+        <!-- Timer Bar -->
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <div style="flex:1;height:8px;background:rgba(255,255,255,0.1);border-radius:4px;overflow:hidden;">
+            <div id="game-timer-bar" style="height:100%;border-radius:4px;background:linear-gradient(90deg,#58CC02,#FFD700);transition:width 1s linear;width:100%;"></div>
+          </div>
+          <div id="game-timer-num" style="font-size:15px;font-weight:800;color:#FFD700;min-width:24px;text-align:center;">30</div>
+        </div>
+
+        <!-- Question Card -->
+        <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:22px 20px;margin-bottom:16px;text-align:center;position:relative;overflow:hidden;">
+          <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,#FFD700,transparent);"></div>
+          <div id="q-number" style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.4);margin-bottom:12px;">Câu 1 / 15</div>
+          <div id="q-text" style="font-size:17px;font-weight:700;line-height:1.5;color:#fff;min-height:60px;">Đang tải...</div>
+          <div id="q-hint-box" style="display:none;margin-top:10px;padding:8px 12px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:10px;font-size:12px;color:rgba(255,215,0,0.9);line-height:1.5;text-align:left;">
+            <span style="font-weight:700;">💡 Gợi ý: </span><span id="q-hint-text"></span>
+          </div>
+        </div>
+
+        <!-- Answers Grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;">
+          <button class="game-ans-btn" id="btn-a" onclick="selectAnswer('A')"><span class="game-ans-label">A</span><span id="ans-a-text"></span></button>
+          <button class="game-ans-btn" id="btn-b" onclick="selectAnswer('B')"><span class="game-ans-label">B</span><span id="ans-b-text"></span></button>
+          <button class="game-ans-btn" id="btn-c" onclick="selectAnswer('C')"><span class="game-ans-label">C</span><span id="ans-c-text"></span></button>
+          <button class="game-ans-btn" id="btn-d" onclick="selectAnswer('D')"><span class="game-ans-label">D</span><span id="ans-d-text"></span></button>
+        </div>
+
+        <!-- Lifelines -->
+        <div style="display:flex;justify-content:center;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
+          <button class="game-lifeline-btn" id="ll-fifty" onclick="useLifeline('fifty')"><span style="font-size:22px;">5️⃣0️⃣</span><span>50:50</span></button>
+          <button class="game-lifeline-btn" id="ll-friend" onclick="useLifeline('friend')"><span style="font-size:22px;">📞</span><span>Bạn bè</span></button>
+          <button class="game-lifeline-btn" id="ll-audience" onclick="useLifeline('audience')"><span style="font-size:22px;">👥</span><span>Khán giả</span></button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="game-result" style="display:none;text-align:center;padding:40px 20px;">
+      <div id="result-emoji" style="font-size:80px;margin-bottom:16px;">🏆</div>
+      <div id="result-title" style="font-size:28px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,#FFD700,#FFA500);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Xuất sắc!</div>
+      <div id="result-subtitle" style="font-size:15px;color:rgba(255,255,255,0.6);margin-bottom:24px;line-height:1.5;"></div>
+      <div style="display:flex;justify-content:center;gap:16px;margin-bottom:24px;flex-wrap:wrap;">
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:16px 20px;min-width:100px;"><div id="res-correct" style="font-size:28px;font-weight:900;color:#FFD700;">0</div><div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">Câu đúng</div></div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:16px 20px;min-width:100px;"><div id="res-streak" style="font-size:28px;font-weight:900;color:#FFD700;">0</div><div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">Chuỗi dài nhất</div></div>
+        <div style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:16px 20px;min-width:100px;"><div id="res-time" style="font-size:28px;font-weight:900;color:#FFD700;">0s</div><div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:4px;">Thời gian TB</div></div>
+      </div>
+      <div id="result-prize" style="font-size:20px;font-weight:800;color:#FFD700;margin-bottom:24px;padding:14px 24px;background:rgba(255,215,0,0.1);border:1px solid rgba(255,215,0,0.3);border-radius:16px;display:inline-block;">+0 XP</div>
+      <div id="result-explain" style="display:none;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:14px;font-size:13px;color:rgba(255,255,255,0.7);text-align:left;margin:0 auto 20px;max-width:400px;line-height:1.6;">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#58CC02;margin-bottom:6px;">💡 Gợi ý & Giải thích</div>
+        <div id="explain-text"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:10px;padding:0 16px;">
+        <button onclick="initMillionaireGame()" style="background:linear-gradient(135deg,#FFD700,#FFA500);color:#1a1a00;border:none;border-radius:16px;padding:16px 32px;font-size:16px;font-weight:800;font-family:inherit;cursor:pointer;width:100%;max-width:300px;box-shadow:0 4px 20px rgba(255,215,0,0.3);">🔄 Chơi lại</button>
+        <button onclick="exitGame()" style="background:transparent;border:1.5px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.7);border-radius:16px;padding:14px 32px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;width:100%;max-width:300px;">📚 Quay lại học</button>
+      </div>
+    </div>
+
+  </div>
+  <!-- ===================== END SCREEN GAME ===================== -->
 
   <!-- ===================== MODAL: CODE ===================== -->
   <div class="modal-overlay" id="modal-code">
@@ -2322,8 +2487,8 @@
   <script>
     // ========== NAVIGATION ==========
     // API Base URL - tự động chuyển giữa local và production
-    const API_BASE = window.location.hostname === 'localhost'
-      ? 'https://archive-78yj.onrender.com'
+    const API_BASE = window.location.hostname === 'localhost' 
+      ? 'http://localhost:3001'
       : '';  // Dùng relative path khi deploy (cùng domain)
     let chatHistory = [];
     let countdownTimer = null;
@@ -2567,8 +2732,347 @@
       }, 1000);
     }
 
-    function startGame() {
-      showToast('🎮 Mini game đang được phát triển! Sớm ra mắt!', 'success');
+     // ════════════════════════════════════════════
+    //  AI LÀ TRIỆU PHÚ — Game Logic
+    // ════════════════════════════════════════════
+
+    function startGame() { startMillionaire(); }
+
+    const PRIZE_LEVELS = [
+      { label: '100',     xp: 10,  milestone: false },
+      { label: '200',     xp: 15,  milestone: false },
+      { label: '300',     xp: 20,  milestone: false },
+      { label: '500',     xp: 25,  milestone: true  }, // Mốc 1 — câu 4
+      { label: '1K',      xp: 30,  milestone: false },
+      { label: '2K',      xp: 38,  milestone: false },
+      { label: '4K',      xp: 48,  milestone: true  }, // Mốc 2 — câu 7
+      { label: '8K',      xp: 58,  milestone: false },
+      { label: '16K',     xp: 70,  milestone: false },
+      { label: '32K',     xp: 85,  milestone: true  }, // Mốc 3 — câu 10
+      { label: '64K',     xp: 100, milestone: false },
+      { label: '125K',    xp: 120, milestone: false },
+      { label: '250K',    xp: 145, milestone: false },
+      { label: '500K',    xp: 175, milestone: false },
+      { label: '1 TRIỆU', xp: 220, milestone: false },
+    ];
+    const MILESTONE_LEVELS = [3, 6, 9]; // 0-indexed → câu 4, 7, 10
+
+    let gameQuestions = [];
+    let gameState = {
+      currentQ: 0, score: 0, correct: 0, streak: 0, maxStreak: 0,
+      totalTime: 0, answered: false,
+      lifelinesUsed: { fifty: false, friend: false, audience: false },
+      timerInterval: null, timerValue: 30, gameOver: false,
+      safeMilestone: -1, questionStartTime: 0,
+    };
+
+    function startMillionaire() { goToScreen('game'); }
+
+    async function initMillionaireGame() {
+      gameState = {
+        currentQ: 0, score: 0, correct: 0, streak: 0, maxStreak: 0,
+        totalTime: 0, answered: false,
+        lifelinesUsed: { fifty: false, friend: false, audience: false },
+        timerInterval: null, timerValue: 30, gameOver: false,
+        safeMilestone: -1, questionStartTime: Date.now(),
+      };
+      ['ll-fifty','ll-friend','ll-audience'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.classList.remove('used'); el.disabled = false; }
+      });
+      document.getElementById('game-intro').style.display = 'none';
+      document.getElementById('game-result').style.display = 'none';
+      document.getElementById('game-play-area').style.display = 'none';
+      document.getElementById('game-loading').style.display = 'block';
+
+      try {
+        const res  = await fetch(`${API_BASE}/api/game-questions`);
+        const data = await res.json();
+        gameQuestions = (data.success && data.questions.length > 0)
+          ? data.questions : shuffleArr(getOfflineQuestions());
+      } catch (e) {
+        gameQuestions = shuffleArr(getOfflineQuestions());
+      }
+
+      document.getElementById('game-loading').style.display = 'none';
+      document.getElementById('game-play-area').style.display = 'block';
+      buildPrizeLadder();
+      renderQuestion();
+    }
+
+    function buildPrizeLadder() {
+      const ladder = document.getElementById('prize-ladder');
+      ladder.innerHTML = '';
+      PRIZE_LEVELS.forEach((p, i) => {
+        const el = document.createElement('div');
+        el.className = 'prize-step' + (p.milestone ? ' milestone' : '');
+        el.id = `prize-step-${i}`;
+        el.textContent = p.label;
+        ladder.appendChild(el);
+      });
+      updatePrizeLadder();
+    }
+
+    function updatePrizeLadder() {
+      PRIZE_LEVELS.forEach((_, i) => {
+        const el = document.getElementById(`prize-step-${i}`);
+        if (!el) return;
+        el.classList.remove('passed','current');
+        if (i < gameState.currentQ) el.classList.add('passed');
+        else if (i === gameState.currentQ) el.classList.add('current');
+      });
+      const cur = document.getElementById(`prize-step-${gameState.currentQ}`);
+      if (cur) cur.scrollIntoView({ behavior:'smooth', inline:'center', block:'nearest' });
+    }
+
+    function renderQuestion() {
+      if (gameState.currentQ >= gameQuestions.length) { endGame(true); return; }
+      const q = gameQuestions[gameState.currentQ];
+      gameState.answered = false;
+      gameState.questionStartTime = Date.now();
+      document.getElementById('q-number').textContent = `Câu ${gameState.currentQ + 1} / ${gameQuestions.length}`;
+      document.getElementById('q-text').textContent = q.question;
+      const hintBox = document.getElementById('q-hint-box');
+      if (hintBox) hintBox.style.display = 'none';
+      const answers = { A: q.a, B: q.b, C: q.c, D: q.d };
+      ['A','B','C','D'].forEach(k => {
+        const btn = document.getElementById(`btn-${k.toLowerCase()}`);
+        const txt = document.getElementById(`ans-${k.toLowerCase()}-text`);
+        if (btn && txt) {
+          btn.className = 'game-ans-btn';
+          btn.disabled = false;
+          txt.textContent = answers[k] || '';
+        }
+      });
+      updatePrizeLadder();
+      startQuestionTimer();
+    }
+
+    function startQuestionTimer() {
+      clearInterval(gameState.timerInterval);
+      gameState.timerValue = 30;
+      updateTimerGameUI();
+      gameState.timerInterval = setInterval(() => {
+        gameState.timerValue--;
+        updateTimerGameUI();
+        if (gameState.timerValue <= 0) {
+          clearInterval(gameState.timerInterval);
+          if (!gameState.answered) timeOut();
+        }
+      }, 1000);
+    }
+
+    function updateTimerGameUI() {
+      const num = document.getElementById('game-timer-num');
+      const bar = document.getElementById('game-timer-bar');
+      if (num) num.textContent = gameState.timerValue;
+      if (bar) {
+        bar.style.width = (gameState.timerValue / 30 * 100) + '%';
+        bar.style.background = gameState.timerValue <= 10
+          ? 'linear-gradient(90deg,#FFA500,#FF4B4B)'
+          : 'linear-gradient(90deg,#58CC02,#FFD700)';
+      }
+    }
+
+    function timeOut() {
+      gameState.answered = true;
+      gameState.streak = 0;
+      const q = gameQuestions[gameState.currentQ];
+      const correctBtn = document.getElementById(`btn-${q.answer.toLowerCase()}`);
+      if (correctBtn) correctBtn.classList.add('reveal-correct');
+      showHintBox(q);
+      setTimeout(() => gameState.safeMilestone >= 0 ? endGame(false, true) : endGame(false), 2500);
+    }
+
+    function selectAnswer(choice) {
+      if (gameState.answered) return;
+      gameState.answered = true;
+      clearInterval(gameState.timerInterval);
+      gameState.totalTime += Math.round((Date.now() - gameState.questionStartTime) / 1000);
+      const q = gameQuestions[gameState.currentQ];
+      const correct = q.answer.toUpperCase();
+      const choiceBtn  = document.getElementById(`btn-${choice.toLowerCase()}`);
+      const correctBtn = document.getElementById(`btn-${correct.toLowerCase()}`);
+      ['A','B','C','D'].forEach(k => {
+        const btn = document.getElementById(`btn-${k.toLowerCase()}`);
+        if (btn) btn.disabled = true;
+      });
+      if (choice === correct) {
+        if (choiceBtn) choiceBtn.classList.add('correct');
+        gameState.correct++;
+        gameState.streak++;
+        gameState.maxStreak = Math.max(gameState.maxStreak, gameState.streak);
+        gameState.score += PRIZE_LEVELS[gameState.currentQ]?.xp || 10;
+        updateGameXPDisplay();
+        if (MILESTONE_LEVELS.includes(gameState.currentQ)) gameState.safeMilestone = gameState.currentQ;
+        setTimeout(() => {
+          gameState.currentQ++;
+          gameState.currentQ >= gameQuestions.length ? endGame(true) : renderQuestion();
+        }, 1500);
+      } else {
+        if (choiceBtn)  choiceBtn.classList.add('wrong');
+        if (correctBtn) correctBtn.classList.add('reveal-correct');
+        gameState.streak = 0;
+        showHintBox(q);
+        setTimeout(() => gameState.safeMilestone >= 0 ? endGame(false, true) : endGame(false), 2500);
+      }
+    }
+
+    function showHintBox(q) {
+      if (!q.explain) return;
+      const box  = document.getElementById('q-hint-box');
+      const text = document.getElementById('q-hint-text');
+      if (box && text) { text.textContent = q.explain; box.style.display = 'block'; }
+    }
+
+    function endGame(won, safeStop = false) {
+      clearInterval(gameState.timerInterval);
+      gameState.gameOver = true;
+      const xpEarned = gameState.score;
+      // Cộng XP vào badge chính
+      const badge = document.querySelector('.xp-badge');
+      if (badge) {
+        const cur = parseInt(badge.textContent.replace(/\D/g,'')) || 0;
+        badge.textContent = `⭐ ${cur + xpEarned} XP`;
+      }
+      document.getElementById('game-play-area').style.display = 'none';
+      document.getElementById('game-result').style.display = 'block';
+      const total   = gameQuestions.length;
+      const correct = gameState.correct;
+      document.getElementById('res-correct').textContent = correct;
+      document.getElementById('res-streak').textContent  = gameState.maxStreak;
+      const avgTime = gameState.currentQ > 0 ? Math.round(gameState.totalTime / gameState.currentQ) : 0;
+      document.getElementById('res-time').textContent = avgTime + 's';
+      document.getElementById('result-prize').textContent = `+${xpEarned} XP`;
+      // Hint câu sai cuối (nếu có)
+      if (!won && !safeStop && gameState.currentQ < gameQuestions.length) {
+        const q = gameQuestions[gameState.currentQ];
+        if (q.explain) {
+          document.getElementById('explain-text').textContent = q.explain;
+          document.getElementById('result-explain').style.display = 'block';
+        }
+      } else {
+        document.getElementById('result-explain').style.display = 'none';
+      }
+      // Emoji & tiêu đề
+      const pct = correct / total;
+      let emoji, title, subtitle;
+      if (won) {
+        emoji = '🏆'; title = 'TRIỆU PHÚ!'; subtitle = `Hoàn hảo! Đúng tất cả ${total} câu!`;
+        triggerConfetti();
+      } else if (safeStop) {
+        emoji = '🛡️'; title = 'Mốc an toàn!';
+        subtitle = `Dừng tại mốc an toàn — đúng ${correct}/${gameState.currentQ} câu.`;
+      } else if (pct >= 0.7) {
+        emoji = '⭐'; title = 'Xuất sắc!'; subtitle = `Đúng ${correct}/${total} câu. Tiếp tục cố gắng!`;
+      } else if (pct >= 0.4) {
+        emoji = '👍'; title = 'Khá tốt!'; subtitle = `Đúng ${correct}/${total} câu. Ôn thêm bài học nhé!`;
+      } else {
+        emoji = '📚'; title = 'Cần ôn thêm!'; subtitle = `Đúng ${correct}/${total} câu. Hãy đọc lại tài liệu!`;
+      }
+      document.getElementById('result-emoji').textContent   = emoji;
+      document.getElementById('result-title').textContent   = title;
+      document.getElementById('result-subtitle').textContent = subtitle;
+    }
+
+    function updateGameXPDisplay() {
+      const badge      = document.querySelector('.xp-badge');
+      const gameDisplay = document.getElementById('game-xp-display');
+      if (badge && gameDisplay) gameDisplay.textContent = badge.textContent;
+    }
+
+    // ── Lifelines ──
+    function useLifeline(type) {
+      if (gameState.lifelinesUsed[type] || gameState.answered) return;
+      gameState.lifelinesUsed[type] = true;
+      const btn = document.getElementById(`ll-${type}`);
+      if (btn) { btn.classList.add('used'); btn.disabled = true; }
+      if (type === 'fifty') {
+        const correct = gameQuestions[gameState.currentQ].answer.toUpperCase();
+        const wrong   = shuffleArr(['A','B','C','D'].filter(k => k !== correct));
+        wrong.slice(0,2).forEach(k => {
+          const b = document.getElementById(`btn-${k.toLowerCase()}`);
+          if (b) { b.classList.add('eliminated'); b.disabled = true; }
+        });
+      } else if (type === 'friend') {
+        const q       = gameQuestions[gameState.currentQ];
+        const correct = q.answer.toUpperCase();
+        const ans     = Math.random() < 0.80 ? correct : ['A','B','C','D'].filter(k=>k!==correct)[Math.floor(Math.random()*3)];
+        showGameToast(`📞 Bạn bè gợi ý: <strong>${ans}</strong> — "Mình nghĩ là đáp án này, nhưng không chắc 100%!"`);
+      } else {
+        const correct = gameQuestions[gameState.currentQ].answer.toUpperCase();
+        const votes   = { A:5, B:5, C:5, D:5 };
+        votes[correct] += Math.floor(Math.random()*40)+35;
+        const total   = Object.values(votes).reduce((a,b)=>a+b,0);
+        const pct     = {};
+        ['A','B','C','D'].forEach(k => pct[k] = Math.round(votes[k]/total*100));
+        showGameToast(`👥 Khán giả: A:${pct.A}% &nbsp;B:${pct.B}% &nbsp;C:${pct.C}% &nbsp;D:${pct.D}%`);
+      }
+    }
+
+    function showGameToast(html) {
+      let t = document.getElementById('game-toast-overlay');
+      if (!t) {
+        t = document.createElement('div');
+        t.id = 'game-toast-overlay';
+        t.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(20,20,40,0.95);border:1px solid rgba(255,215,0,0.4);color:#fff;padding:14px 20px;border-radius:16px;font-size:14px;font-family:inherit;z-index:999;max-width:340px;width:90%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.4);';
+        document.body.appendChild(t);
+      }
+      t.innerHTML = html;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 4500);
+    }
+
+    function exitGame() {
+      clearInterval(gameState.timerInterval);
+      document.getElementById('game-intro').style.display = 'block';
+      document.getElementById('game-play-area').style.display = 'none';
+      document.getElementById('game-result').style.display = 'none';
+      document.getElementById('game-loading').style.display = 'none';
+      goToScreen('learning');
+    }
+
+    function triggerConfetti() {
+      const colors = ['#FFD700','#FF6B35','#58CC02','#1CB0F6','#FF4B4B','#fff'];
+      const c = document.createElement('div');
+      c.className = 'confetti-container';
+      document.body.appendChild(c);
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.cssText = `left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;animation-duration:${1.5+Math.random()*2}s;animation-delay:${Math.random()}s;`;
+        c.appendChild(p);
+      }
+      setTimeout(() => c.remove(), 4000);
+    }
+
+    function shuffleArr(arr) {
+      const a = [...arr];
+      for (let i = a.length-1; i > 0; i--) {
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+      }
+      return a;
+    }
+
+    function getOfflineQuestions() {
+      return [
+        { question:"Tên thật của Trần Hưng Đạo là gì?", a:"Trần Quốc Tuấn", b:"Trần Thái Tông", c:"Trần Nhân Tông", d:"Trần Quốc Toản", answer:"A", level:1, explain:"Tên thật là Trần Quốc Tuấn, con trai An Sinh Vương Trần Liễu." },
+        { question:"Nhân dân thường gọi Trần Hưng Đạo là gì?", a:"Đức Thánh Gióng", b:"Đức Thánh Trần", c:"Đức Thánh Tản", d:"Đức Thánh Mẫu", answer:"B", level:1, explain:"Danh hiệu gắn với họ Trần." },
+        { question:"Trần Hưng Đạo lãnh đạo bao nhiêu lần kháng chiến thắng lợi?", a:"1 lần", b:"2 lần", c:"3 lần", d:"4 lần", answer:"C", level:1, explain:"Ba lần: 1258, 1285 và 1287-1288." },
+        { question:"Trần Hưng Đạo mất vào năm nào?", a:"1285", b:"1295", c:"1300", d:"1310", answer:"C", level:1, explain:"Ông mất ngày 20/8 năm 1300 tại Vạn Kiếp." },
+        { question:"Cha của Trần Hưng Đạo là ai?", a:"Trần Thái Tông", b:"Trần Liễu", c:"Trần Nhân Tông", d:"Trần Anh Tông", answer:"B", level:1, explain:"Cha là An Sinh Vương Trần Liễu." },
+        { question:"Chiến thắng Bạch Đằng lịch sử diễn ra năm nào?", a:"1258", b:"1285", c:"1288", d:"1300", answer:"C", level:2, explain:"Trận thuỷ chiến vĩ đại kết thúc cuộc kháng chiến lần thứ ba." },
+        { question:"Toa Đô bị tiêu diệt tại trận nào?", a:"Bạch Đằng", b:"Hàm Tử", c:"Tây Kết", d:"Chương Dương", answer:"C", level:2, explain:"Tây Kết là chiến thắng lớn trong cuộc kháng chiến lần hai." },
+        { question:"Ô Mã Nhi bị bắt sống tại trận nào?", a:"Hàm Tử", b:"Chương Dương", c:"Bạch Đằng", d:"Tây Kết", answer:"C", level:2, explain:"Thất bại thảm hại nhất của quân Nguyên." },
+        { question:"Con rể nổi tiếng của Trần Hưng Đạo là ai?", a:"Trần Quang Khải", b:"Phạm Ngũ Lão", c:"Trần Khánh Dư", d:"Đinh Lễ", answer:"B", level:2, explain:"Phạm Ngũ Lão đang đan giỏ mải nghĩ việc nước đến bị giáo đâm không biết." },
+        { question:"Cuốn sách binh pháp do Trần Hưng Đạo biên soạn?", a:"Binh thư yếu lược", b:"Binh pháp Tôn Tử", c:"Lĩnh Nam chích quái", d:"Đại Việt sử ký", answer:"A", level:2, explain:"Binh thư yếu lược — những điều cốt lõi trong binh pháp." },
+        { question:"Thoát Hoan trốn về nước bằng cách nào?", a:"Cải trang thường dân", b:"Chui vào ống đồng để quân khiêng chạy", c:"Đi thuyền nhỏ vượt biển", d:"Cưỡi ngựa phi về biên giới", answer:"B", level:3, explain:"Chi tiết kỳ lạ và nhục nhã nhất lịch sử thất trận." },
+        { question:"Trần Khánh Dư tiêu diệt thuyền lương địch tại đâu?", a:"Bạch Đằng", b:"Vân Đồn", c:"Hàm Tử", d:"Lạch Trường", answer:"B", level:3, explain:"Vân Đồn — cửa biển Đông Bắc, nay thuộc Quảng Ninh." },
+        { question:"Cha Trần Hưng Đạo mâu thuẫn với ai?", a:"Vua Trần Thái Tông — tranh giành vợ", b:"Vua Trần Nhân Tông", c:"Trần Quang Khải", d:"Phạm Ngũ Lão", answer:"A", level:3, explain:"Bà Thuận Thiên vốn là vợ Trần Liễu trước khi bị vua lấy." },
+        { question:"Câu 'Nếu bệ hạ muốn hàng hãy chém đầu thần trước' thể hiện điều gì?", a:"Kiêu ngạo", b:"Lòng trung thành tuyệt đối và ý chí không đầu hàng", c:"Phục tùng mệnh lệnh", d:"Tức giận nhất thời", answer:"B", level:3, explain:"Ông sẵn sàng chết chứ không chịu đầu hàng." },
+        { question:"Trần Hưng Đạo dặn hậu sự thế nào?", a:"Xây lăng lớn tại Vạn Kiếp", b:"Chôn cất đơn sơ tại quê", c:"Hỏa táng, tro chôn trong vườn An Lạc, không xây lăng to", d:"Thả tro xuống sông Bạch Đằng", answer:"C", level:3, explain:"Ông không muốn làm khổ dân vì tang lễ." },
+      ];
     }
 
     // ========== CHAT ==========
