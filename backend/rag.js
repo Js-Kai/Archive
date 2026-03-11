@@ -35,7 +35,7 @@ const SYNONYMS = {
 const STOP_WORDS = new Set([
   'là', 'và', 'của', 'có', 'được', 'trong', 'này', 'đó', 'một', 'các', 'những',
   'với', 'cho', 'từ', 'về', 'khi', 'như', 'đã', 'sẽ', 'để', 'hay', 'hoặc',
-  'tôi', 'bạn', 'ông', 'bà', 'anh', 'chị', 'họ', 'ta', 'mình', 'hãy', 'đây',
+  'tôi', 'bà', 'anh', 'chị', 'họ', 'ta', 'mình', 'hãy', 'đây',
   'thì', 'mà', 'nên', 'vì', 'do', 'theo', 'lại', 'cũng', 'đều', 'rất', 'không',
   'hỏi', 'biết', 'nói', 'thế', 'nào', 'gì', 'sao', 'ai', 'đâu', 'bao', 'nhiêu',
   'cho', 'tôi', 'hỏi', 'muốn', 'cần', 'giúp', 'giải', 'thích', 'hiểu',
