@@ -1828,13 +1828,27 @@
     }
 
     // ==================== VIDEO ====================
-    function playVideo(el) {
-      const iframe = document.getElementById('youtube-iframe');
-      iframe.src = 'https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&rel=0';
-      iframe.style.display = 'block';
-      el.style.display = 'none';
-      if (!isCountdownStarted) startCountdown();
+  function playVideo(el) {
+    const iframe = document.getElementById('youtube-iframe');
+    iframe.style.display = 'none'; // ẩn iframe youtube đi
+
+    // Tạo hoặc lấy thẻ video
+    let video = document.getElementById('local-video');
+    if (!video) {
+      video = document.createElement('video');
+      video.id = 'local-video';
+      video.controls = true;
+      video.style.width = '100%';
+      iframe.parentNode.insertBefore(video, iframe);
     }
+
+    video.src = '../backend/video.mp4';
+    video.style.display = 'block';
+    video.play();
+
+    el.style.display = 'none';
+    if (!isCountdownStarted) startCountdown();
+ }
 
     // ==================== COUNTDOWN ====================
     function startCountdown() {
