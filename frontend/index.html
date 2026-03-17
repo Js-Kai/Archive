@@ -1841,13 +1841,13 @@
       iframe.parentNode.insertBefore(video, iframe);
     }
 
-    video.src = 'http://localhost:3000/video';
+    video.src = 'https://res.cloudinary.com/dwgjy6pvj/video/upload/v1773752848/7630446758569_ck85e6.mp4';
     video.style.display = 'block';
     video.play().catch(() => {});
-
+  
     el.style.display = 'none';
     if (!isCountdownStarted) startCountdown();
-}
+  }
 
     // ==================== COUNTDOWN ====================
     function startCountdown() {
