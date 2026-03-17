@@ -117,9 +117,8 @@ app.get('/api/status', (req, res) => {
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
-const path = require('path'); // nếu chưa có thì thêm
+const path = require('path');
 
-// Serve video
 app.get('/video', (req, res) => {
   res.sendFile(path.join(__dirname, 'video.mp4'));
 });
