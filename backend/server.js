@@ -24,7 +24,7 @@ let rag = null;
 
 try {
   const content = fs.readFileSync(TAILIEU_PATH, 'utf-8');
-  const rag = new RAGEngine(content, process.env.GEMINI_API_KEY);
+  rag = new RAGEngine(content, process.env.GEMINI_API_KEY);
   console.log('✅ RAG Engine sẵn sàng!');
 } catch (err) {
   console.error('❌ Không thể khởi tạo RAG Engine:', err.message);
@@ -53,9 +53,8 @@ app.post('/api/validate-code', (req, res) => {
 });
 
 // ─── Route: Chat (dùng RAG, không cần API key) ───────────────────────────────
+// MỚI (đúng)
 app.post('/api/chat', async (req, res) => {
-  const result = await rag.query(message);
-
   if (!rag) {
     return res.status(500).json({
       error: 'RAG Engine chưa khởi động. Kiểm tra file tailieu.txt!',
@@ -63,14 +62,15 @@ app.post('/api/chat', async (req, res) => {
   }
 
   try {
-    const result = rag.query(message.trim());
+    const { message } = req.body; // ✅ khai báo message
+    const result = await rag.query(message.trim()); // ✅ thêm await
     res.json({
       success: true,
       message: result.answer,
       meta: {
         intent: result.intent,
-        sources: result.chunks,
-        engine: 'RAG-local',
+        sources: result.sources, // ✅ đổi từ result.chunks → result.sources
+        engine: 'RAG-Gemini',
       },
     });
   } catch (err) {
