@@ -418,18 +418,21 @@ async function generateAnswerWithGemini(intent, topChunks, query, apiKey) {
   };
   const intro = intros[intent] || intros.general;
 
-  const prompt = `Bạn là trợ lý lịch sử chuyên về Trần Hưng Đạo và lịch sử Việt Nam.
-Chỉ trả lời dựa vào tài liệu dưới đây. Không bịa đặt thông tin ngoài tài liệu.
-Trả lời bằng tiếng Việt, súc tích (tối đa 200 từ), đúng trọng tâm câu hỏi.
-Không dùng markdown, không dùng dấu **, chỉ viết văn xuôi hoặc gạch đầu dòng •.
+  const prompt = `Bạn là trợ lý lịch sử chuyên về Trần Hưng Đạo.
+Chỉ trả lời dựa vào tài liệu dưới đây. Không bịa đặt.
+Trả lời bằng tiếng Việt. Không dùng markdown, không dùng dấu **.
+
+QUY TẮC ĐỘ DÀI:
+- Câu hỏi đơn giản (tên, năm sinh, năm mất, cha là ai...): trả lời 1-2 câu ngắn gọn
+- Câu hỏi về sự kiện, trận chiến: trả lời 3-5 câu
+- Câu hỏi tổng quan, so sánh: trả lời tối đa 10 câu
 
 TÀI LIỆU:
 ${context}
 
 CÂU HỎI: ${query}
 
-TRẢ LỜI:`;
-
+TRẢ LỜI (ngắn gọn, đúng trọng tâm):`;
   const res = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite-preview:generateContent?key=${apiKey}`,
     {
