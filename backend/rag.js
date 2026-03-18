@@ -476,7 +476,7 @@ class RAGEngine {
   }
 
   async query(question) {
-  if (this.isOutOfScope(question)) {
+  if (isOutOfScope(question)) {
     return {
       answer: 'Xin lỗi, tôi chỉ có thể trả lời các câu hỏi về Trần Hưng Đạo và lịch sử liên quan.',
       intent: 'out_of_scope',
