@@ -473,7 +473,7 @@ class RAGEngine {
   this.chunks = buildChunks(content);
   this.avgChunkLen = this.chunks.reduce((s, c) => s + c.tokens.length, 0) / this.chunks.length;
   this.geminiApiKey = geminiApiKey; // thêm dòng này
-}
+  }
 
   async query(question) {
   if (this.isOutOfScope(question)) {
@@ -516,64 +516,6 @@ class RAGEngine {
     intent,
     sources: topChunks.map(c => c.title)
   };
-}
-
-    // 2. Tokenize + mở rộng query
-    const rawTokens = tokenize(question);
-    const expandedTokens = expandQuery(rawTokens);
-
-    // 2.5. Xác định intent trước để dùng cho scoring
-    const intent = detectIntent(question);
-
-    // 3. Tính điểm từng chunk (với context-aware)
-    const scored = this.chunks.map(chunk => ({
-      ...chunk,
-      score: scoreChunk(expandedTokens, chunk, this.avgChunkLen, intent),
-    }));
-
-    // 4. Sắp xếp và lấy top 3 (ưu tiên non-full-section nếu điểm gần bằng)
-    const sorted = scored
-      .filter(c => c.score > 0)
-      .sort((a, b) => {
-        if (Math.abs(b.score - a.score) < 0.5 && a.isFullSection !== b.isFullSection) {
-          return a.isFullSection ? 1 : -1; // chunk nhỏ hơn lên trước
-        }
-        return b.score - a.score;
-      });
-
-    const topChunks = sorted.slice(0, 5); // Tăng từ 3 lên 5 chunks
-    
-    // Loại bỏ duplicate chunks (cùng title và text)
-    const uniqueChunks = [];
-    const seen = new Set();
-    const topScore = topChunks[0]?.score || 0;
-    
-    for (const chunk of topChunks) {
-      const key = `${chunk.title}|||${chunk.text.substring(0, 100)}`;
-      // Chỉ lấy chunks có score >= 20% của top score (loại bỏ chunks quá yếu)
-      if (!seen.has(key) && chunk.score >= topScore * 0.2) {
-        seen.add(key);
-        uniqueChunks.push(chunk);
-      }
-    }
-
-    // 5. Nếu không tìm thấy gì liên quan
-    if (uniqueChunks.length === 0 || uniqueChunks[0].score < 0.3) {
-      return {
-        answer: 'Tôi chưa tìm thấy thông tin cụ thể về câu hỏi này trong tài liệu. Bạn có thể hỏi về: tên tuổi, tiểu sử, các trận chiến, chiến thuật, tác phẩm, hay câu nói nổi tiếng của Trần Hưng Đạo nhé! ⚔️',
-        chunks: [],
-        intent: 'not_found',
-      };
-    }
-
-    // 6. Sinh câu trả lời (intent đã được xác định ở bước 2.5)
-    const answer = generateAnswer(intent, uniqueChunks, question);
-
-    return {
-      answer,
-      chunks: uniqueChunks.map(c => ({ title: c.title, score: c.score.toFixed(2) })),
-      intent,
-    };
   }
 }
 
