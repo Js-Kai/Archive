@@ -117,7 +117,7 @@ app.listen(PORT, () => {
   console.log('');
   console.log('🚀 ======================================');
   console.log(`🚀  Server: http://localhost:${PORT}`);
-  console.log(`🧠  Engine: RAG local (không cần API key)`);
+  console.log(`🧠  Engine: RAG + Gemini (${process.env.GEMINI_API_KEY ? '✅ API key OK' : '⚠️ Không có key, dùng local'})`);
   console.log(`📚  Chunks: ${rag ? rag.chunks.length : 'N/A'}`);
   console.log('🚀 ======================================');
   console.log('');
