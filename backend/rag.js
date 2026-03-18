@@ -315,7 +315,7 @@ function detectIntent(query) {
 }
 
 // ─── Template sinh câu trả lời tự nhiên ─────────────────────────────────────
-function generateAnswer(intent, topChunks, query) {
+function generateAnswerLocal(intent, topChunks, query) {
   const topText = topChunks.map(c => c.text).join('\n\n');
 
   const intros = {
@@ -391,7 +391,66 @@ function generateAnswer(intent, topChunks, query) {
 
   return `${intro}\n\n${answer}`;
 }
+async function generateAnswerWithGemini(intent, topChunks, query, apiKey) {
+  const context = topChunks.slice(0, 3).map(c => c.text).join('\n\n');
 
+  const intros = {
+    name:             '📛 Về tên gọi của Trần Hưng Đạo:',
+    birth:            '🎂 Về ngày sinh của Trần Hưng Đạo:',
+    death:            '🕯️ Về sự ra đi của Trần Hưng Đạo:',
+    family:           '👨‍👩‍👦 Về gia đình Trần Hưng Đạo:',
+    battle_1:         '⚔️ Về cuộc kháng chiến lần thứ nhất (1258):',
+    battle_2:         '⚔️ Về cuộc kháng chiến lần thứ hai (1285):',
+    battle_3:         '⚔️ Về cuộc kháng chiến lần thứ ba (1287-1288):',
+    battles_overview: '🏹 Tổng quan về ba lần kháng chiến chống Mông-Nguyên:',
+    strategy_vuonkhong: '🧠 Về chiến thuật "Vườn không nhà trống":',
+    strategy_nhandam: '🧠 Về chiến lược "Chiến tranh nhân dân":',
+    strategy:         '🧠 Về chiến lược và chiến thuật của Trần Hưng Đạo:',
+    hich:             '📜 Về Hịch Tướng Sĩ - áng văn bất hủ:',
+    books:            '📚 Về các tác phẩm của Trần Hưng Đạo:',
+    quotes:           '💬 Những câu nói nổi tiếng của Trần Hưng Đạo:',
+    temple:           '🛕 Về đền thờ và di tích Trần Hưng Đạo:',
+    character:        '🌟 Về nhân cách và đạo đức của Trần Hưng Đạo:',
+    overview:         '⚔️ Giới thiệu về Trần Hưng Đạo - Anh hùng dân tộc:',
+    significance:     '🏛️ Về ý nghĩa lịch sử của Trần Hưng Đạo:',
+    general:          '📖 Từ tài liệu học tập:',
+  };
+  const intro = intros[intent] || intros.general;
+
+  const prompt = `Bạn là trợ lý lịch sử chuyên về Trần Hưng Đạo và lịch sử Việt Nam.
+Chỉ trả lời dựa vào tài liệu dưới đây. Không bịa đặt thông tin ngoài tài liệu.
+Trả lời bằng tiếng Việt, súc tích (tối đa 200 từ), đúng trọng tâm câu hỏi.
+Không dùng markdown, không dùng dấu **, chỉ viết văn xuôi hoặc gạch đầu dòng •.
+
+TÀI LIỆU:
+${context}
+
+CÂU HỎI: ${query}
+
+TRẢ LỜI:`;
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.3,
+          maxOutputTokens: 400,
+        }
+      })
+    }
+  );
+
+  if (!res.ok) throw new Error(`Gemini API error: ${res.status}`);
+  const data = await res.json();
+  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!text) throw new Error('Gemini trả về rỗng');
+
+  return `${intro}\n\n${text.trim()}`;
+}
 // ─── Kiểm tra câu hỏi có ngoài phạm vi không ────────────────────────────────
 function isOutOfScope(query) {
   const q = normalize(query);
@@ -410,22 +469,54 @@ function isOutOfScope(query) {
 
 // ─── MAIN: Hàm xử lý câu hỏi ─────────────────────────────────────────────────
 class RAGEngine {
-  constructor(content) {
-    this.content = content;
-    this.chunks = buildChunks(content);
-    this.avgChunkLen = this.chunks.reduce((s, c) => s + c.tokens.length, 0) / (this.chunks.length || 1);
-    console.log(`✅ RAG Engine: đã index ${this.chunks.length} chunks`);
+  constructor(content, geminiApiKey = null) {
+  this.chunks = buildChunks(content);
+  this.avgChunkLen = this.chunks.reduce((s, c) => s + c.tokens.length, 0) / this.chunks.length;
+  this.geminiApiKey = geminiApiKey; // thêm dòng này
+}
+
+  async query(question) {
+  if (this.isOutOfScope(question)) {
+    return {
+      answer: 'Xin lỗi, tôi chỉ có thể trả lời các câu hỏi về Trần Hưng Đạo và lịch sử liên quan.',
+      intent: 'out_of_scope',
+      sources: []
+    };
   }
 
-  query(question) {
-    // 1. Kiểm tra ngoài phạm vi
-    if (isOutOfScope(question)) {
-      return {
-        answer: 'Vui lòng chỉ đặt câu hỏi liên quan đến nhân vật trong bài học hiện tại.',
-        chunks: [],
-        intent: 'out_of_scope',
-      };
+  const tokens = tokenize(normalize(question));
+  const expanded = expandQuery(tokens);
+  const intent = detectIntent(question);
+
+  const scored = this.chunks.map(chunk => ({
+    chunk,
+    score: scoreChunk(expanded, chunk, this.avgChunkLen, intent)
+  }));
+
+  scored.sort((a, b) => b.score - a.score);
+  const topChunks = scored.slice(0, 5).map(s => s.chunk);
+
+  // Thử Gemini trước, fallback về local nếu lỗi
+  let answer;
+  if (this.geminiApiKey) {
+    try {
+      answer = await generateAnswerWithGemini(intent, topChunks, question, this.geminiApiKey);
+    } catch (err) {
+      console.warn('⚠️ Gemini thất bại, dùng RAG local:', err.message);
     }
+  }
+
+  // Fallback nếu Gemini lỗi hoặc không có key
+  if (!answer) {
+    answer = generateAnswerLocal(intent, topChunks, question);
+  }
+
+  return {
+    answer,
+    intent,
+    sources: topChunks.map(c => c.title)
+  };
+}
 
     // 2. Tokenize + mở rộng query
     const rawTokens = tokenize(question);
