@@ -24,7 +24,7 @@ let rag = null;
 
 try {
   const content = fs.readFileSync(TAILIEU_PATH, 'utf-8');
-  rag = new RAGEngine(content);
+  const rag = new RAGEngine(content, process.env.GEMINI_API_KEY);
   console.log('✅ RAG Engine sẵn sàng!');
 } catch (err) {
   console.error('❌ Không thể khởi tạo RAG Engine:', err.message);
@@ -53,12 +53,8 @@ app.post('/api/validate-code', (req, res) => {
 });
 
 // ─── Route: Chat (dùng RAG, không cần API key) ───────────────────────────────
-app.post('/api/chat', (req, res) => {
-  const { message } = req.body;
-
-  if (!message || !message.trim()) {
-    return res.status(400).json({ error: 'Tin nhắn không được để trống' });
-  }
+app.post('/api/chat', async (req, res) => {
+  const result = await rag.query(message);
 
   if (!rag) {
     return res.status(500).json({
