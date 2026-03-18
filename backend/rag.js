@@ -392,28 +392,29 @@ function generateAnswerLocal(intent, topChunks, query) {
   return `${intro}\n\n${answer}`;
 }
 async function generateAnswerWithGemini(intent, topChunks, query, apiKey) {
+  console.log('🤖 Gọi Gemini API...');
   const context = topChunks.slice(0, 3).map(c => c.text).join('\n\n');
 
   const intros = {
-    name:             '📛 Về tên gọi của Trần Hưng Đạo:',
-    birth:            '🎂 Về ngày sinh của Trần Hưng Đạo:',
-    death:            '🕯️ Về sự ra đi của Trần Hưng Đạo:',
-    family:           '👨‍👩‍👦 Về gia đình Trần Hưng Đạo:',
-    battle_1:         '⚔️ Về cuộc kháng chiến lần thứ nhất (1258):',
-    battle_2:         '⚔️ Về cuộc kháng chiến lần thứ hai (1285):',
-    battle_3:         '⚔️ Về cuộc kháng chiến lần thứ ba (1287-1288):',
-    battles_overview: '🏹 Tổng quan về ba lần kháng chiến chống Mông-Nguyên:',
+    name:               '📛 Về tên gọi của Trần Hưng Đạo:',
+    birth:              '🎂 Về ngày sinh của Trần Hưng Đạo:',
+    death:              '🕯️ Về sự ra đi của Trần Hưng Đạo:',
+    family:             '👨‍👩‍👦 Về gia đình Trần Hưng Đạo:',
+    battle_1:           '⚔️ Về cuộc kháng chiến lần thứ nhất (1258):',
+    battle_2:           '⚔️ Về cuộc kháng chiến lần thứ hai (1285):',
+    battle_3:           '⚔️ Về cuộc kháng chiến lần thứ ba (1287-1288):',
+    battles_overview:   '🏹 Tổng quan về ba lần kháng chiến chống Mông-Nguyên:',
     strategy_vuonkhong: '🧠 Về chiến thuật "Vườn không nhà trống":',
-    strategy_nhandam: '🧠 Về chiến lược "Chiến tranh nhân dân":',
-    strategy:         '🧠 Về chiến lược và chiến thuật của Trần Hưng Đạo:',
-    hich:             '📜 Về Hịch Tướng Sĩ - áng văn bất hủ:',
-    books:            '📚 Về các tác phẩm của Trần Hưng Đạo:',
-    quotes:           '💬 Những câu nói nổi tiếng của Trần Hưng Đạo:',
-    temple:           '🛕 Về đền thờ và di tích Trần Hưng Đạo:',
-    character:        '🌟 Về nhân cách và đạo đức của Trần Hưng Đạo:',
-    overview:         '⚔️ Giới thiệu về Trần Hưng Đạo - Anh hùng dân tộc:',
-    significance:     '🏛️ Về ý nghĩa lịch sử của Trần Hưng Đạo:',
-    general:          '📖 Từ tài liệu học tập:',
+    strategy_nhandam:   '🧠 Về chiến lược "Chiến tranh nhân dân":',
+    strategy:           '🧠 Về chiến lược và chiến thuật của Trần Hưng Đạo:',
+    hich:               '📜 Về Hịch Tướng Sĩ - áng văn bất hủ:',
+    books:              '📚 Về các tác phẩm của Trần Hưng Đạo:',
+    quotes:             '💬 Những câu nói nổi tiếng của Trần Hưng Đạo:',
+    temple:             '🛕 Về đền thờ và di tích Trần Hưng Đạo:',
+    character:          '🌟 Về nhân cách và đạo đức của Trần Hưng Đạo:',
+    overview:           '⚔️ Giới thiệu về Trần Hưng Đạo - Anh hùng dân tộc:',
+    significance:       '🏛️ Về ý nghĩa lịch sử của Trần Hưng Đạo:',
+    general:            '📖 Từ tài liệu học tập:',
   };
   const intro = intros[intent] || intros.general;
 
@@ -444,11 +445,20 @@ TRẢ LỜI:`;
     }
   );
 
-  if (!res.ok) throw new Error(`Gemini API error: ${res.status}`);
+  console.log('📡 Gemini status:', res.status);
+
+  if (!res.ok) {
+    const errBody = await res.text();
+    console.error('❌ Gemini lỗi body:', errBody);
+    throw new Error(`Gemini API error: ${res.status}`);
+  }
+
   const data = await res.json();
   const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) throw new Error('Gemini trả về rỗng');
 
+  console.log('✅ Gemini text:', text ? text.slice(0, 50) : 'RỖNG');
+
+  if (!text) throw new Error('Gemini trả về rỗng');
   return `${intro}\n\n${text.trim()}`;
 }
 // ─── Kiểm tra câu hỏi có ngoài phạm vi không ────────────────────────────────
